@@ -1,6 +1,9 @@
 
 package domino;
 
+import gui.jFrame;
+import java.util.ArrayList;
+
 /**
  *
  * @author Carlos
@@ -8,15 +11,23 @@ package domino;
 public class Controlador {
     Jogo jogo;
     int njogadores;
+    jFrame gui;
  
-    public Controlador () {
+    public Controlador(jFrame aThis) {
+        gui = aThis;
+    }
+
+    public void mostraJogoAtual (ArrayList<Peca> pecas, ArrayList<Jogador> jogadores) {
+        gui.mostraJogo(pecas);
+        gui.mostraPecasJogador(jogadores.get(0).listaDePecas);
+        gui.adicionaMsg("Carlos eh foda\n");
         
     }
     
     public void novoJogo (int nJogadores) {
   
         this.njogadores = nJogadores;
-        jogo = new Jogo("tcp", njogadores);
+        jogo = new Jogo("tcp", njogadores, this);
         
         // Adicionando jogadores.
         // Quando for implementar o TCP, ler essa informaçao dos clientes
@@ -59,6 +70,6 @@ public class Controlador {
             System.out.println("Peca "+i+": "+jogo.pecasJogo.get(i));
         }
 
-        //        jogo.iniciar();
+        jogo.iniciar();
     }
 }

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Jogo {
+    Controlador controlador;
     ArrayList<Peca> pecasJogo = new ArrayList<> ();
-    //ListaDupla<Peca> pecasJogo = new ListaDupla<Peca>;
-   
+    ArrayList<Peca> pecasDisponiveis = new ArrayList<> ();
     ArrayList<Jogador> jogadores = new ArrayList<> ();
     
     Servidor servidor;
@@ -17,10 +17,11 @@ public class Jogo {
     String transporte;
     boolean jogando = false;
     
-    public Jogo (String transporte, int maxJogadores) {
+    public Jogo (String transporte, int maxJogadores, Controlador cont) {
         this.transporte = transporte;
 	this.servidor = new Servidor (transporte);
         this.maxJogadores = maxJogadores;
+        this.controlador = cont;
     }
 
     public void adicionaJogador (Jogador jogador) {
@@ -36,7 +37,26 @@ public class Jogo {
     }
 
     public void iniciar () {
+        int i;
         
+        // Ajustando as pecas do jogo atual e as pecas disponiveis
+        for (i=0; i<=pecasJogo.size(); i++) {
+            pecasDisponiveis.add(pecasJogo.get(0));
+            pecasJogo.remove(0);
+        }
+        
+        System.out.println("\nPecas do jogo atual:");
+        for (i=0; i < pecasJogo.size(); i++)
+            System.out.print(pecasJogo.get(i).toString());
+        System.out.println("\nTotal: "+i+" pecas.");
+        
+        System.out.println("\nPecas disponiveis:");
+        for (i=0; i < pecasDisponiveis.size(); i++)
+            System.out.print(pecasDisponiveis.get(i).toString());
+        System.out.println("\nTotal: "+i+" pecas.");
+        
+        // Atualizando a GUI
+        controlador.mostraJogoAtual(pecasJogo, jogadores);
     }
     
     public void misturaPecas() {
