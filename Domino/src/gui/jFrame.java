@@ -4,21 +4,21 @@
  */
 package gui;
 
-import domino.Jogador;
-import domino.Jogo;
-import javax.swing.SwingUtilities;
+import domino.Controlador;
 
 /**
  *
  * @author Carlos
  */
 public class jFrame extends javax.swing.JFrame {
+    Controlador controlador;
 
     /**
      * Creates new form jFrame
      */
     public jFrame() {
         initComponents();
+        controlador = new Controlador();
         setVisible(true);
     }
 
@@ -178,10 +178,6 @@ public class jFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        Jogo jogo = new Jogo ("tcp");
-        jogo.adicionaJogador(new Jogador ("Carlos"));
-        jogo.iniciar();
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -194,8 +190,8 @@ public class jFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        String njogadores;
-        njogadores = jTextField4.getText();
+        int njogadores = Integer.parseInt(jTextField4.getText());
+        controlador.novoJogo(njogadores);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

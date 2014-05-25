@@ -18,6 +18,6 @@ public class Domino {
      */
     public static void main(String[] args) {
         JFrame jFrame = new jFrame();
-
+        
     }
 }
