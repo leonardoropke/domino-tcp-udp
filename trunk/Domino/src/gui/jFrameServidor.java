@@ -1,44 +1,70 @@
-
 package gui;
 
 import domino.Controlador;
 import domino.Peca;
+import domino.TCPClientSocket;
+import domino.TCPServerSocket;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JOptionPane;
+import org.json.simple.JSONObject;
 
 /**
  *
  * @author Carlos
  */
-public class jFrame extends javax.swing.JFrame {
+public class jFrameServidor extends javax.swing.JFrame {
+
     Controlador controlador;
 
     /**
      * Creates new form jFrame
      */
-    
-    public void mostraJogo (ArrayList<Peca> pecas) {
+    public void mostraJogo(ArrayList<Peca> pecas) {
         String pecasFinais = "";
-        for (int i=0; i<pecas.size(); i++)
+        for (int i = 0; i < pecas.size(); i++) {
             pecasFinais += pecas.get(i).toString();
+        }
         jTextField1.setText(pecasFinais);
     }
-    
-    public void mostraPecasJogador (ArrayList<Peca> pecas) {
+
+    public void mostraPecasJogador(ArrayList<Peca> pecas) {
         String pecasFinais = "";
-        for (int i=0; i<pecas.size(); i++)
+        for (int i = 0; i < pecas.size(); i++) {
             pecasFinais += pecas.get(i).toString();
+        }
         jTextField3.setText(pecasFinais);
     }
-    
-    public void adicionaMsg (String msg) {
+
+    public void adicionaMsg(String msg) {
         displayServidor.append(msg);
     }
-    
-    public jFrame() {
+//cliente envia pela porta 1235
+//cliente escuta pela porta 1234
+//servidor envia pela porta 1234
+//servidor escuta pela porta 1235
+
+    public jFrameServidor() {
+        System.out.println("Servidor");
         initComponents();
-        controlador = new Controlador(this);
         setVisible(true);
+        Timer timer = new Timer();
+        final TCPClientSocket clientSocket = new TCPClientSocket("localhost", 1235);
+        final TCPServerSocket serverSocket = new TCPServerSocket(1234);
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+            JSONObject mensagemServidor = new JSONObject();
+
+            @Override
+            public void run() {
+                if (clientSocket.receberMensagem()) {
+                    mensagemServidor.put("mensagem", "Pedido aceito");
+                    serverSocket.enviarMensagem(mensagemServidor.toJSONString());
+                }
+            }
+        },
+                1000, 1000);
     }
 
     /**
@@ -203,7 +229,6 @@ public class jFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
@@ -215,21 +240,20 @@ public class jFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if (jTextField4.getText().isEmpty())
+        if (jTextField4.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Digite o numero de jogadores!");
-        else {
+        } else {
             int njogadores = Integer.parseInt(jTextField4.getText());
-            if ((njogadores < 1) || (njogadores > 4))
+            if ((njogadores < 1) || (njogadores > 4)) {
                 JOptionPane.showMessageDialog(null, "O numero de jogadores deve ser entre 1 e 4!");
-            else
+            } else {
                 controlador.novoJogo(njogadores);
+            }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
-
     /**
      * @param args the command line arguments
      */
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea displayServidor;
     private javax.swing.JButton jButton1;
@@ -249,4 +273,8 @@ public class jFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
+
+    public static void main(String args[]) {
+        jFrameServidor gui = new jFrameServidor();
+    }
 }
