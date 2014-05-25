@@ -1,7 +1,7 @@
 
 package domino;
 
-import gui.jFrameServidor;
+import gui.jFrame;
 import java.util.ArrayList;
 
 /**
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public class Controlador {
     Jogo jogo;
     int njogadores;
-    jFrameServidor gui;
+    jFrame gui;
  
-    public Controlador(jFrameServidor aThis) {
+    public Controlador(jFrame aThis) {
         gui = aThis;
     }
     

@@ -1,7 +1,7 @@
 package domino;
 
 import java.util.ArrayList;
-import org.json.simple.JSONObject;
+//import org.json.simple.JSONObject;
 
 public class Jogador {
     public String nome;
@@ -9,10 +9,6 @@ public class Jogador {
 
     public Jogador (String nm) {
 	this.nome = nm;
-    }
-    
-    public Jogador (JSONObject jogador ){
-	this.nome = (String) jogador.get(nome);
     }
     
     public void recebePeca (Peca peca) {
@@ -45,13 +41,4 @@ public class Jogador {
 
     public void jogar () {}
     
-    public JSONObject toJSON(){
-     JSONObject jogador = new JSONObject();
-     jogador.put("nome", nome);
-     return jogador;
-    }
-    
-    public String toJSONString(){
-        return toJSON().toJSONString();
-    }
 }

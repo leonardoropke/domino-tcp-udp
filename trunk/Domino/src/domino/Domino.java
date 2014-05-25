@@ -4,7 +4,7 @@
  */
 package domino;
 
-import gui.jFrameServidor;
+import gui.jFrame;
 import javax.swing.JFrame;
 
 /**
@@ -17,7 +17,7 @@ public class Domino {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        JFrame jFrame = new jFrameServidor();
+        JFrame jFrame = new jFrame();
 
     }
 }
