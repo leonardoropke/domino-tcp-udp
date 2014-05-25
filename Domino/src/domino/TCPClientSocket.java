@@ -16,38 +16,43 @@ import java.util.TimerTask;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-class Client {
+public class TCPClientSocket {
 
-    public Client() {
+    String serverLocation;
+    int portNumber;
+
+    public TCPClientSocket(String serverLocation, int portNumber) {
+        this.serverLocation = serverLocation;
+        this.portNumber = portNumber;
     }
 
-    public static void receberMensagem() {
+    public boolean receberMensagem() {
         Socket skt;
         BufferedReader in;
         JSONObject mensagem;
         JSONParser parser = new JSONParser();
         try {
-            skt = new Socket("localhost", 1234);
+            skt = new Socket(serverLocation, portNumber);
             in = new BufferedReader(new InputStreamReader(skt.getInputStream()));
             mensagem = (JSONObject) parser.parse(in);
-            System.out.println("Mensagem do servidor");
             System.out.println(mensagem);
             in.close();
+            return true;
         } catch (ConnectException e) {
-            System.out.println("Aguardando dados do servidor...");
         } catch (Exception e) {
             System.out.print("Erro no cliente!");
         }
-
+        return false;
     }
 
     public static void main(String args[]) {
         Timer timer = new Timer();
+        final TCPClientSocket socket = new TCPClientSocket("localhost", 1234);
         timer.scheduleAtFixedRate(new TimerTask() {
 
             @Override
             public void run() {
-                receberMensagem();
+                socket.receberMensagem();
             }
         }, 1000, 1000);
     }

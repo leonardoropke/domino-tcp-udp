@@ -15,33 +15,38 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.json.simple.JSONObject;
 
-class Server {
+public class TCPServerSocket {
 
-    public static void enviarMensagem(String msg) {
-        JSONObject mensagem = new JSONObject();
-        mensagem.put("mensagem", msg);
-        String data = mensagem.toJSONString();
+    private int portNumber;
+
+    public TCPServerSocket(int portNumber) {
+        this.portNumber = portNumber;
+    }
+
+    public boolean enviarMensagem(String msg) {
         try {
-            ServerSocket srvr = new ServerSocket(1234);
+            ServerSocket srvr = new ServerSocket(portNumber);
             Socket skt = srvr.accept();
-            System.out.print("Servidor conectado!\n");
             PrintWriter out = new PrintWriter(skt.getOutputStream(), true);
-            out.print(data);
+            out.print(msg);
             out.close();
             skt.close();
             srvr.close();
+            return true;
         } catch (Exception e) {
             System.out.print(e);
         }
+        return false;
     }
 
     public static void main(String args[]) throws IOException {
+        TCPServerSocket server = new TCPServerSocket(1234);
         String mensagem = "";
-        while (!mensagem.matches("sair")) {
+        while (true) {
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Digite a sua mensagem abaixo:");
             mensagem = bufferRead.readLine();
-            enviarMensagem(mensagem);
+            server.enviarMensagem(mensagem);
         }
 
     }
