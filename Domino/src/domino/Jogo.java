@@ -36,25 +36,22 @@ public class Jogo {
     }
 
     public void iniciar () {
-        misturaPecas();
+        
     }
     
     public void misturaPecas() {
-        pecasJogo = geraPecas();
         int i;
-        System.out.println("Gerando pecas...");
-        for (i=0; i < pecasJogo.size(); i++) {
-            System.out.print(pecasJogo.get(i).toString());
-        }
-        System.out.println("\nTotal: "+i+" pecas.");
-
-        System.out.println("\nMostrando pecas depois de misturadas...");
-        Collections.shuffle(pecasJogo);
-                for (i=0; i < pecasJogo.size(); i++) {
-            System.out.print(pecasJogo.get(i).toString());
-        }
-        System.out.println("\nTotal: "+i+" pecas.");
         
+        // Gerando pecas
+        pecasJogo = geraPecas();
+       
+        // Misturando pecas
+        Collections.shuffle(pecasJogo);
+
+        // Mostrando pecas misturadas
+        for (i=0; i < pecasJogo.size(); i++)
+            System.out.print(pecasJogo.get(i).toString());
+        System.out.println("\nTotal: "+i+" pecas.");
     }
     
     public ArrayList<Peca> geraPecas (){

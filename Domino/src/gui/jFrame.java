@@ -5,6 +5,8 @@
 package gui;
 
 import domino.Controlador;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -190,8 +192,12 @@ public class jFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        int njogadores = Integer.parseInt(jTextField4.getText());
-        controlador.novoJogo(njogadores);
+        if (jTextField4.getText().isEmpty())
+            JOptionPane.showMessageDialog(null, "Digite o numero de jogadores!");
+        else {
+            int njogadores = Integer.parseInt(jTextField4.getText());
+            controlador.novoJogo(njogadores);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
