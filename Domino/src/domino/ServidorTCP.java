@@ -15,12 +15,11 @@ public class ServidorTCP {
    
    public ServidorTCP (int porta) {
      this.porta = porta;
-     this.clientes = new ArrayList<PrintStream>();
+     this.clientes = new ArrayList<>();
    }
    
    public void executa () throws IOException {
      ServerSocket servidor = new ServerSocket(this.porta);
-     System.out.println("Porta 12345 aberta!");
      
      while (true) {
        // aceita um cliente
