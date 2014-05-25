@@ -2,6 +2,8 @@
 package gui;
 
 import domino.Controlador;
+import domino.Peca;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,9 +16,28 @@ public class jFrame extends javax.swing.JFrame {
     /**
      * Creates new form jFrame
      */
+    
+    public void mostraJogo (ArrayList<Peca> pecas) {
+        String pecasFinais = "";
+        for (int i=0; i<pecas.size(); i++)
+            pecasFinais += pecas.get(i).toString();
+        jTextField1.setText(pecasFinais);
+    }
+    
+    public void mostraPecasJogador (ArrayList<Peca> pecas) {
+        String pecasFinais = "";
+        for (int i=0; i<pecas.size(); i++)
+            pecasFinais += pecas.get(i).toString();
+        jTextField3.setText(pecasFinais);
+    }
+    
+    public void adicionaMsg (String msg) {
+        displayServidor.append(msg);
+    }
+    
     public jFrame() {
         initComponents();
-        controlador = new Controlador();
+        controlador = new Controlador(this);
         setVisible(true);
     }
 
@@ -49,8 +70,11 @@ public class jFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setText("Aqui eh a area do jogo");
+        jTextField1.setEditable(false);
+        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
+        jTextField3.setEditable(false);
+        jTextField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField3.setText("Aqui ficam as pecas do jogador");
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -93,6 +117,8 @@ public class jFrame extends javax.swing.JFrame {
         jLabel4.setText("Porta:");
 
         displayServidor.setColumns(20);
+        displayServidor.setEditable(false);
+        displayServidor.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         displayServidor.setRows(5);
         jScrollPane1.setViewportView(displayServidor);
 
