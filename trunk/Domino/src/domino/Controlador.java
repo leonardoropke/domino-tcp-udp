@@ -16,11 +16,18 @@ public class Controlador {
     public Controlador(jFrameServidor aThis) {
         gui = aThis;
     }
+    
+    public void atualizaJogadores (ArrayList<Jogador> jogadores) {
+        gui.atualizaJogadores(jogadores);
+    }
 
-    public void mostraJogoAtual (ArrayList<Peca> pecas, ArrayList<Jogador> jogadores) {
+    public void mostraJogoAtual (ArrayList<Peca> pecas, ArrayList<Peca> pecasDisponiveis, ArrayList<Jogador> jogadores, int rodada) {
         gui.mostraJogo(pecas);
+        gui.mostraPecasDisponiveis (pecasDisponiveis);
+        
         gui.mostraPecasJogador(jogadores.get(0).listaDePecas);
-        gui.adicionaMsg("Carlos eh foda\n");
+        gui.atualizaRodada(rodada);
+        gui.adicionaMsg("Jogo iniciado!");
         
     }
     
@@ -31,8 +38,13 @@ public class Controlador {
         
         // Adicionando jogadores.
         // Quando for implementar o TCP, ler essa informaçao dos clientes
+        String nome = gui.getNomeJogador();
+        Jogador jogador;
         for (int i=0; i<njogadores; i++) {
-            Jogador jogador = new Jogador("Jogador"+i);
+            if (i == 0)
+                jogador = new Jogador(nome); // O primeiro jogador eh o que esta rodando o servidor!
+            else
+                jogador = new Jogador("Jogador"+i);
             jogo.adicionaJogador(jogador);
         }
 

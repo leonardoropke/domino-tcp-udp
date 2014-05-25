@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import org.json.simple.JSONObject;
 
 public class Jogador {
-    String nome;
-    ArrayList<Peca> listaDePecas = new ArrayList<>();
+    public String nome;
+    public ArrayList<Peca> listaDePecas = new ArrayList<>();
 
     public Jogador (String nm) {
 	this.nome = nm;

@@ -25,10 +25,8 @@ public class Jogo {
     }
 
     public void adicionaJogador (Jogador jogador) {
-        if (jogadores.size() == maxJogadores)
-            System.out.println ("Impossivel adicionar jogador!\nNumero maximo de jogadores ja foi atingido!\n"); 
-	else
-            jogadores.add(jogador);
+        jogadores.add(jogador);
+        controlador.atualizaJogadores (jogadores);
     }
 
     public void jogar () {
@@ -56,7 +54,7 @@ public class Jogo {
         System.out.println("\nTotal: "+i+" pecas.");
         
         // Atualizando a GUI
-        controlador.mostraJogoAtual(pecasJogo, jogadores);
+        controlador.mostraJogoAtual(pecasJogo, pecasDisponiveis, jogadores, rodada);
     }
     
     public void misturaPecas() {
