@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package gui;
 
 import domino.Controlador;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 /**
  *
@@ -196,7 +192,10 @@ public class jFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Digite o numero de jogadores!");
         else {
             int njogadores = Integer.parseInt(jTextField4.getText());
-            controlador.novoJogo(njogadores);
+            if ((njogadores < 1) || (njogadores > 4))
+                JOptionPane.showMessageDialog(null, "O numero de jogadores deve ser entre 1 e 4!");
+            else
+                controlador.novoJogo(njogadores);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

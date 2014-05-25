@@ -49,6 +49,7 @@ public class Jogo {
         Collections.shuffle(pecasJogo);
 
         // Mostrando pecas misturadas
+        System.out.println("");
         for (i=0; i < pecasJogo.size(); i++)
             System.out.print(pecasJogo.get(i).toString());
         System.out.println("\nTotal: "+i+" pecas.");
