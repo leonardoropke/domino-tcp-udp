@@ -7,7 +7,6 @@ package domino;
  */
 public class Controlador {
     Jogo jogo;
-    Jogador jogadores[];
     int njogadores;
  
     public Controlador () {
@@ -18,22 +17,36 @@ public class Controlador {
   
         this.njogadores = nJogadores;
         jogo = new Jogo("tcp", njogadores);
-        jogadores = new Jogador[njogadores];
+        
+        // Adicionando jogadores.
+        // Quando for implementar o TCP, ler essa informaçao dos clientes
+        for (int i=0; i<njogadores; i++) {
+            Jogador jogador = new Jogador("Jogador"+i);
+            jogo.adicionaJogador(jogador);
+        }
 
+        // Criando e distribuindo as pecas
         jogo.misturaPecas();
-
-        Jogador jogador1 = new Jogador("Carlos");
         
-        jogador1.recebePeca(new Peca(1,5));
-        jogador1.recebePeca(new Peca(2,7));
-        jogador1.recebePeca(new Peca(4,4));
-
-        System.out.println("Pecas do jogador 1:");
-        jogador1.mostraPecas();
+        Peca peca = jogo.pecasJogo.get(0);
+        System.out.println("Peca atual: "+peca);
+  
+        /*
+        // Distribuindo pecas entre os jogadores
+        Peca peca;
+        for (int i=0; i<njogadores; i++) {
+            for (int j=0; j<6; j++) { // 6 Pecas para cada jogador...
+                peca = jogo.pecasJogo.get(j); // Pegar uma peca da lista de pecas...
+                jogo.jogadores.get(i).recebePeca(peca); // Dar a peca para o jogador
+                jogo.pecasJogo.remove(j); // Remover a peca da lista de pecas do jogo
+            }
+        }
         
-        jogador1.removePeca(new Peca(1,5));
-        System.out.println("Pecas do jogador 1 depois de remover a [1:5]...");
-        jogador1.mostraPecas();
-//        jogo.iniciar();
+        for (int i=0; i<njogadores; i++) {
+            System.out.println ("Mostrando pecas do jogador "+i+":");
+            jogo.jogadores.get(i).mostraPecas();
+        }
+*/
+        //        jogo.iniciar();
     }
 }
