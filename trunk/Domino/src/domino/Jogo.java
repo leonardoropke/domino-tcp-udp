@@ -1,33 +1,75 @@
+
 package domino;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Jogo {
-    ArrayList<Peca> jogo = new ArrayList<> ();
+    ArrayList<Peca> pecasJogo = new ArrayList<> ();
+    //ListaDupla<Peca> pecasJogo = new ListaDupla<Peca>;
+   
     ArrayList<Jogador> jogadores = new ArrayList<> ();
+    
     Servidor servidor;
-    int njogadores = 0;
+    Cliente cliente;
+    int maxJogadores;
     int rodada = 0;
     String transporte;
     boolean jogando = false;
     
-    public Jogo (String transporte) {
+    public Jogo (String transporte, int maxJogadores) {
         this.transporte = transporte;
 	this.servidor = new Servidor (transporte);
+        this.maxJogadores = maxJogadores;
     }
 
     public void adicionaJogador (Jogador jogador) {
-        if (njogadores == 4) {
+        if (jogadores.size() == maxJogadores)
             System.out.println ("Impossivel adicionar jogador!\nNumero maximo de jogadores ja foi atingido!\n"); 
-	}
-	else {
+	else
             jogadores.add(jogador);
-            njogadores++;
-	}
     }
 
-    public void iniciar () {
+    public void jogar () {
         jogando = true;
         System.out.println("Iniciando jogo!");
     }
+
+    public void iniciar () {
+        misturaPecas();
+    }
+    
+    public void misturaPecas() {
+        pecasJogo = geraPecas();
+        int i;
+        System.out.println("Gerando pecas...");
+        for (i=0; i < pecasJogo.size(); i++) {
+            System.out.print(pecasJogo.get(i).toString());
+        }
+        System.out.println("\nTotal: "+i+" pecas.");
+
+        System.out.println("\nMostrando pecas depois de misturadas...");
+        Collections.shuffle(pecasJogo);
+                for (i=0; i < pecasJogo.size(); i++) {
+            System.out.print(pecasJogo.get(i).toString());
+        }
+        System.out.println("\nTotal: "+i+" pecas.");
+        
+    }
+    
+    public ArrayList<Peca> geraPecas (){
+        //esse método retorna um array com todas a pecas possíveis no dominó
+        ArrayList<Peca> pecas = new ArrayList<> ();
+        Peca peca;
+        for (int i = 1; i <= 7; i++) {
+            for (int j = 1; j <= 7; j++) {
+                if (j >= i) {
+                    peca = new Peca(i,j);
+                    pecas.add(peca);
+                }
+            }
+        }
+        return pecas;
+    }
+    
 }
