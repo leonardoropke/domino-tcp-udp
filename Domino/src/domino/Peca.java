@@ -1,5 +1,7 @@
 package domino;
 
+import org.json.simple.JSONObject;
+
 public class Peca {
     public int ladoE, ladoD;
 
@@ -11,5 +13,16 @@ public class Peca {
     @Override
     public String toString () {
         return "[" + this.ladoE + ":" + this.ladoD + "]";
+    }
+    
+    public JSONObject toJSON(){
+    JSONObject peca = new JSONObject();
+    peca.put("ladoE", ladoE);
+    peca.put("ladoD", ladoD);
+    return peca;
+    }
+    
+    public String toJSONString(){
+     return toJSON().toJSONString();
     }
 }
