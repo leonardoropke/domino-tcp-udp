@@ -1,14 +1,15 @@
 package domino;
 
 import java.util.ArrayList;
-//import org.json.simple.JSONObject;
 
 public class Jogador {
     public String nome;
+    public String ip;
     public ArrayList<Peca> listaDePecas = new ArrayList<>();
 
-    public Jogador (String nm) {
+    public Jogador (String nm, String ip) {
 	this.nome = nm;
+        this.ip = ip;
     }
     
     public void recebePeca (Peca peca) {

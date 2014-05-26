@@ -33,6 +33,7 @@ public class ControladorCliente {
     // Criar um novo jogo como cliente
     public void novoJogo (String ip, int porta, String nomeJogador) {
         // Conectar-se ao servidor e esperar a resposta!
+        jogo = new JogoCliente(this);
         jogo.conectar(ip, porta, nomeJogador);
     }
     
