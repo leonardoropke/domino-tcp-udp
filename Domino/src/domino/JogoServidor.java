@@ -79,6 +79,7 @@ public class JogoServidor {
 
         // Avisar para o jogador da vez jogar!
         //  ******************************* PAREI AQUI **************************************
+        //servidor.mandaJogar(jogadores, jogadorDavez);
         
     }
 

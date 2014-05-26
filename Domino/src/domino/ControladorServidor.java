@@ -12,6 +12,7 @@ public class ControladorServidor {
     JogoServidor jogo;
     int njogadores;
     jFrame gui;
+    Servidor servidor;
  
     public ControladorServidor(jFrame aThis) {
         gui = aThis;
@@ -39,13 +40,14 @@ public class ControladorServidor {
         // Adicionando jogadores.
         // Quando for implementar o TCP, ler essas informacoes dos clientes!!!!
         Jogador jogador;
+        String ipJogador = "";
         String nomeJogador;
         for (int i=0; i<njogadores; i++) {
             if (i == 0)
                 nomeJogador = gui.getNomeJogador(); // O primeiro jogador eh o que esta rodando o servidor!
             else
                 nomeJogador = "Jogador"+i;
-            jogador = new Jogador(nomeJogador);
+            jogador = new Jogador(nomeJogador, ipJogador);
             jogo.adicionaJogador(jogador);
             gui.adicionaMsg("Jogador '"+nomeJogador+"' conectado!");
         }
