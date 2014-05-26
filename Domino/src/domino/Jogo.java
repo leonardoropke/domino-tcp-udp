@@ -29,12 +29,37 @@ public class Jogo {
         controlador.atualizaJogadores (jogadores);
     }
 
-    public void jogar () {
-        jogando = true;
-        System.out.println("Iniciando jogo!");
-    }
+    public void preparaJogo () {
+        // Criando e distribuindo as pecas
+        misturaPecas();
+ 
+        // Distribuindo pecas entre os jogadores
+        Peca peca;
+        int x=0; // Controla o array de pecas
+        for (int i=0; i<jogadores.size(); i++) {
+            for (int j=0; j<6; j++) { // 6 Pecas para cada jogador...
+                peca = pecasJogo.get(x); // Pegar uma peca da lista de pecas...
+                jogadores.get(i).recebePeca(peca); // Dar a peca para o jogador
+                x++;
+            }
+        }
+        for (int i=0; i<x; i++) {
+            System.out.println("Removendo peca "+i+": "+pecasJogo.get(0));
+            pecasJogo.remove(0); // Remover as pecas ja distribuidas da lista de pecas do jogo
+        }
+        
+        for (int i=0; i<jogadores.size(); i++) {
+            System.out.println ("\nMostrando pecas do jogador "+i+":");
+            jogadores.get(i).mostraPecas();
+            System.out.println("");
+        }
+        
+        // Mostrando as pecas que sobraram...
+        System.out.println("Pecas que sobraram:");
+        for (int i=0; i<pecasJogo.size(); i++) {
+            System.out.println("Peca "+i+": "+pecasJogo.get(i));
+        }
 
-    public void iniciar () {
         int i;
         
         // Ajustando as pecas do jogo atual e as pecas disponiveis
@@ -52,6 +77,10 @@ public class Jogo {
         for (i=0; i < pecasDisponiveis.size(); i++)
             System.out.print(pecasDisponiveis.get(i).toString());
         System.out.println("\nTotal: "+i+" pecas.");
+        
+    }
+
+    public void iniciar () {
         
         // Atualizando a GUI
         controlador.mostraJogoAtual(pecasJogo, pecasDisponiveis, jogadores, rodada);
