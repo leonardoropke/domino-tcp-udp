@@ -15,10 +15,16 @@ public class Cliente {
 
     private String host;
     private int porta;
+    private String nomeJogador;
 
-    public Cliente(String host, int porta) {
+    public Cliente(String host, int porta, String nomeJogador) {
         this.host = host;
         this.porta = porta;
+        this.nomeJogador = nomeJogador;
+    }
+    
+    public void conectar () {
+        
     }
 
     public void executa() throws UnknownHostException, IOException {

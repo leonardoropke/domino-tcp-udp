@@ -13,4 +13,11 @@ public class Peca {
         return "[" + this.ladoE + ":" + this.ladoD + "]";
     }
     
+    public boolean ehIgual (Peca pecaRecebida) {
+        if ((ladoE == pecaRecebida.ladoE) && (ladoD == pecaRecebida.ladoD))
+            return true;
+        else
+            return false;
+    }
+    
 }

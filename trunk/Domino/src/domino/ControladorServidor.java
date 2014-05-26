@@ -8,17 +8,17 @@ import java.util.ArrayList;
  *
  * @author Carlos
  */
-public class Controlador {
-    Jogo jogo;
+public class ControladorServidor {
+    JogoServidor jogo;
     int njogadores;
     jFrame gui;
  
-    public Controlador(jFrame aThis) {
+    public ControladorServidor(jFrame aThis) {
         gui = aThis;
     }
     
-    public void atualizaJogadores (ArrayList<Jogador> jogadores) {
-        gui.atualizaJogadores(jogadores);
+    public void atualizaTabelaJogadores (ArrayList<Jogador> jogadores) {
+        gui.atualizaTabelaJogadores(jogadores);
     }
 
     public void mostraJogoAtual (ArrayList<Peca> pecas, ArrayList<Peca> pecasDisponiveis, ArrayList<Jogador> jogadores, int rodada) {
@@ -34,21 +34,27 @@ public class Controlador {
     public void novoJogo (int nJogadores) {
   
         this.njogadores = nJogadores;
-        jogo = new Jogo("tcp", njogadores, this);
+        jogo = new JogoServidor("tcp", njogadores, this);
         
         // Adicionando jogadores.
-        // Quando for implementar o TCP, ler essa informaçao dos clientes
-        String nome = gui.getNomeJogador();
+        // Quando for implementar o TCP, ler essas informacoes dos clientes!!!!
         Jogador jogador;
+        String nomeJogador;
         for (int i=0; i<njogadores; i++) {
             if (i == 0)
-                jogador = new Jogador(nome); // O primeiro jogador eh o que esta rodando o servidor!
+                nomeJogador = gui.getNomeJogador(); // O primeiro jogador eh o que esta rodando o servidor!
             else
-                jogador = new Jogador("Jogador"+i);
+                nomeJogador = "Jogador"+i;
+            jogador = new Jogador(nomeJogador);
             jogo.adicionaJogador(jogador);
+            gui.adicionaMsg("Jogador '"+nomeJogador+"' conectado!");
         }
         
         jogo.preparaJogo ();
+        atualizaTabelaJogadores (jogo.jogadores);
+        mostraJogoAtual(jogo.pecasJogo, jogo.pecasDisponiveis, jogo.jogadores, jogo.rodada);
+        
         jogo.iniciar();
+
     }
 }

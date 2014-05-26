@@ -1,6 +1,6 @@
 package gui;
 
-import domino.Controlador;
+import domino.ControladorServidor;
 import domino.Peca;
 import domino.TCPClientSocket;
 import domino.TCPServerSocket;
@@ -16,7 +16,7 @@ import org.json.simple.JSONObject;
  */
 public class jFrameServidor extends javax.swing.JFrame {
 
-    Controlador controlador;
+    ControladorServidor controlador;
 
     /**
      * Creates new form jFrame
