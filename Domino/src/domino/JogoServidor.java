@@ -4,20 +4,19 @@ package domino;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Jogo {
-    Controlador controlador;
+public class JogoServidor {
+    ControladorServidor controlador;
     ArrayList<Peca> pecasJogo = new ArrayList<> ();
     ArrayList<Peca> pecasDisponiveis = new ArrayList<> ();
     ArrayList<Jogador> jogadores = new ArrayList<> ();
     
     Servidor servidor;
-    Cliente cliente;
     int maxJogadores;
-    int rodada = 0;
+    int rodada = 1;
     String transporte;
     boolean jogando = false;
     
-    public Jogo (String transporte, int maxJogadores, Controlador cont) {
+    public JogoServidor (String transporte, int maxJogadores, ControladorServidor cont) {
         this.transporte = transporte;
 	this.servidor = new Servidor (transporte);
         this.maxJogadores = maxJogadores;
@@ -26,7 +25,8 @@ public class Jogo {
 
     public void adicionaJogador (Jogador jogador) {
         jogadores.add(jogador);
-        controlador.atualizaJogadores (jogadores);
+        controlador.atualizaTabelaJogadores (jogadores);
+
     }
 
     public void preparaJogo () {
@@ -47,26 +47,17 @@ public class Jogo {
             System.out.println("Removendo peca "+i+": "+pecasJogo.get(0));
             pecasJogo.remove(0); // Remover as pecas ja distribuidas da lista de pecas do jogo
         }
-        
-        for (int i=0; i<jogadores.size(); i++) {
-            System.out.println ("\nMostrando pecas do jogador "+i+":");
-            jogadores.get(i).mostraPecas();
-            System.out.println("");
-        }
-        
-        // Mostrando as pecas que sobraram...
-        System.out.println("Pecas que sobraram:");
-        for (int i=0; i<pecasJogo.size(); i++) {
-            System.out.println("Peca "+i+": "+pecasJogo.get(i));
-        }
-
+ 
         int i;
         
-        // Ajustando as pecas do jogo atual e as pecas disponiveis
+        // Mandando as pecas de 'pecasJogo'  para 'pecasDisponiveis'
+        // O vetor de 'pecasJogo' deve ficar vazio para o inicio do jogo!
         for (i=0; i<=pecasJogo.size(); i++) {
             pecasDisponiveis.add(pecasJogo.get(0));
             pecasJogo.remove(0);
         }
+        pecasDisponiveis.add(pecasJogo.get(0));
+        pecasJogo.remove(0);
         
         System.out.println("\nPecas do jogo atual:");
         for (i=0; i < pecasJogo.size(); i++)
@@ -81,9 +72,48 @@ public class Jogo {
     }
 
     public void iniciar () {
+        // Descobrir qual é o 1o jogador (quem tiver a maior peca)
+        int jogadorDavez = procuraJogadorInicial ();
+        System.out.println("A peca inicial foi encontrada com o jogador "+jogadorDavez);
+        jogadores.get(jogadorDavez).mostraPecas();
+
+        // Avisar para o jogador da vez jogar!
+        //  ******************************* PAREI AQUI **************************************
         
-        // Atualizando a GUI
-        controlador.mostraJogoAtual(pecasJogo, pecasDisponiveis, jogadores, rodada);
+    }
+
+    private int procuraJogadorInicial () {
+        int jogadorDavez;
+        int x = 6;
+        Peca pecaProcurada = new Peca(x, x); // Procurar a peca 6, depois a 5, depois ...
+        boolean estaNasDisponiveis = false;
+
+        // Procurar onde esta a maior peca:
+        // Pode estar na fila de pecasDisponiveis ou com um dos jogadores
+        while (!estaNasDisponiveis) {
+            for (int i=0; i<pecasDisponiveis.size(); i++) {
+                if (pecasDisponiveis.get(i).ehIgual(pecaProcurada))
+                    estaNasDisponiveis = true;
+            }
+            if (estaNasDisponiveis) {
+                x--; // Tentar com a proxima menor peca (5, 4, ...)
+                pecaProcurada = new Peca(x, x);
+                estaNasDisponiveis = false;
+            }
+            else
+                estaNasDisponiveis = true;
+        }
+        
+        // Achamos a peca inicial!
+        System.out.println("Peca inicial:"+pecaProcurada.toString());
+        
+        // Descobrir com qual jogador esta a peca inicial!
+        for (int i=0; i<jogadores.size(); i++) {
+            if (jogadores.get(i).procura(pecaProcurada) != -1) // Jogador (i) tem a peca inicial!
+                return i;
+        }
+
+        return -1;
     }
     
     public void misturaPecas() {

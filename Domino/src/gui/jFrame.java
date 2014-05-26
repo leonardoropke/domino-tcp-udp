@@ -1,7 +1,8 @@
 
 package gui;
 
-import domino.Controlador;
+import domino.ControladorCliente;
+import domino.ControladorServidor;
 import domino.Jogador;
 import domino.Peca;
 import java.util.ArrayList;
@@ -12,12 +13,9 @@ import javax.swing.JOptionPane;
  * @author Carlos
  */
 public class jFrame extends javax.swing.JFrame {
-    Controlador controlador;
+    ControladorServidor controladorServidor;
+    ControladorCliente controladorCliente;
 
-    /**
-     * Creates new form jFrame
-     */
-    
     public String getNomeJogador () {
         String nome;
         nome = jTextField2.getText();
@@ -30,7 +28,7 @@ public class jFrame extends javax.swing.JFrame {
     public void mostraPecasDisponiveis (ArrayList<Peca> pecas) {
         String pecasFinais = "";
         for (int i=0; i<pecas.size(); i++)
-            pecasFinais += "Peca 1: "+pecas.get(i).toString()+"\n";
+            pecasFinais += "Peca "+i+1+": "+pecas.get(i).toString()+"\n";
         jTextField3.setText(pecasFinais);
     }
     
@@ -57,17 +55,23 @@ public class jFrame extends javax.swing.JFrame {
         jTextField11.setText(Integer.toString(rodada));
     }
     
-    public void atualizaJogadores (ArrayList<Jogador> jogadores) {
+    public void atualizaTabelaJogadores (ArrayList<Jogador> jogadores) {
         System.out.println("Numero de jogadores: "+jogadores.size());
+        String nomeJogador;
+        String numPecas;
         for (int i=0; i<jogadores.size(); i++) {
-            jTable1.getModel().setValueAt(jogadores.get(i).nome, i, 0);
-            jTable1.getModel().setValueAt(jogadores.get(i).listaDePecas.size(), i, 1);
+            nomeJogador = jogadores.get(i).nome;
+            numPecas = Integer.toString(jogadores.get(i).listaDePecas.size());
+            
+            jTable1.getModel().setValueAt(nomeJogador, i, 0);
+            jTable1.getModel().setValueAt(numPecas, i, 1);
+            System.out.println("Jogador: '"+nomeJogador+"' | nPecas: "+numPecas);
         }
     }
     
     public jFrame() {
         initComponents();
-        controlador = new Controlador(this);
+
         jPanel1.setVisible(false);
         setSize(780, 240); // [732, 621]
         
@@ -309,6 +313,11 @@ public class jFrame extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Conectar a um Servidor"));
 
         jButton2.setText("Conectar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jTextField5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -470,6 +479,9 @@ public class jFrame extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         
+        // Criar uma instancia de servidor!
+        controladorServidor = new ControladorServidor(this);        
+        
         // TODOs os jogos terao SEMPRE 4 jogadores
         int njogadores = 4;
         
@@ -480,7 +492,8 @@ public class jFrame extends javax.swing.JFrame {
             setSize(780, 700); // [732, 621]
             //jPanel2.setVisible(false);
             jPanel1.setVisible(true);
-            controlador.novoJogo(njogadores);
+
+            controladorServidor.novoJogo(njogadores);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -518,6 +531,38 @@ public class jFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         jRadioButton1.setEnabled(false);
     }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        // Criar uma instancia de cliente!
+        controladorCliente = new ControladorCliente(this);
+        
+        String ip = jTextField5.getText();
+        int porta=0;
+        if (!jTextField6.getText().isEmpty())
+            porta = Integer.parseInt(jTextField6.getText());
+        String nomeJogador = jTextField7.getText();
+        
+        
+        if (jTextField6.getText().isEmpty())
+            JOptionPane.showMessageDialog(null, "Digite a porta!");
+        else
+            if (ip.isEmpty())
+                JOptionPane.showMessageDialog(null, "Digite o IP!");
+            else
+                if (nomeJogador.isEmpty())
+                    JOptionPane.showMessageDialog(null, "Digite o seu nome!");
+                else {
+                    setSize(780, 700); // [732, 621]
+                    //jPanel2.setVisible(false);
+                    jPanel1.setVisible(true);
+                    
+                    // Lidos os dados, iniciar uma conexao com o servidor e esperar o inicio do jogo!
+                    controladorCliente.novoJogo(ip, porta, nomeJogador);
+                }
+        
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

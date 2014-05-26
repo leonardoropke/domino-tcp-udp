@@ -24,7 +24,10 @@ public class Jogador {
             System.out.println("Nao consegui remover a peca: "+peca.toString()+"!!!");
     }
   
-    private int procura (Peca peca) {
+    // Metodo pra descobrir se o jogador tem uma determinada peca
+    // Se encontrar, retornar a posicao da peca
+    // Se NAO encontrar, retornar -1
+    public int procura (Peca peca) {
         int i;
         for (i=0; i<listaDePecas.size(); i++) {
             if ((listaDePecas.get(i).ladoE == peca.ladoE) && (listaDePecas.get(i).ladoD == peca.ladoD))
