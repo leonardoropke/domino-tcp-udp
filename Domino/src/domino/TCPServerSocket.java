@@ -42,13 +42,12 @@ public class TCPServerSocket {
 
     public static void main(String args[]) throws IOException {
         TCPServerSocket server = new TCPServerSocket(1234);
-        String mensagem = "";
-        while (true) {
-            BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Digite a sua mensagem abaixo:");
-            mensagem = bufferRead.readLine();
-            server.enviarMensagem(mensagem);
-        }
+        JSONObject o = new JSONObject();
+        o.put("metodo", "teste");
+        String mensagem = o.toJSONString();
+        //while (true) {
+           server.enviarMensagem(mensagem);
+        //}
 
     }
 }
