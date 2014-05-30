@@ -40,20 +40,14 @@ public class TCPClientSocket {
             return true;
         } catch (ConnectException e) {
         } catch (Exception e) {
+            System.out.print(e);
             System.out.print("Erro no cliente!");
         }
         return false;
     }
 
     public static void main(String args[]) {
-        Timer timer = new Timer();
-        final TCPClientSocket socket = new TCPClientSocket("localhost", 1234);
-        timer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
+        TCPClientSocket socket = new TCPClientSocket("localhost", 1234);
                 socket.receberMensagem();
-            }
-        }, 1000, 1000);
     }
 }
