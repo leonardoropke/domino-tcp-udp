@@ -31,7 +31,9 @@ public class TCPServerSocket {
             ObjectInputStream requisicao = new ObjectInputStream(skt.getInputStream());
             System.out.println("Servidor leu requisicao:" + requisicao.readObject());
             ObjectOutputStream resposta = new ObjectOutputStream(skt.getOutputStream());
-            resposta.writeObject("tchau");
+            JSONObject o = new JSONObject();
+            o.put("resposta","tchau");
+            resposta.writeObject(o);
             requisicao.close();
             resposta.close();
             srvr.close();
