@@ -26,28 +26,23 @@ public class TCPClientSocket {
         this.portNumber = portNumber;
     }
 
-    public boolean receberMensagem() {
-        Socket skt;
-        BufferedReader in;
-        JSONObject mensagem;
-        JSONParser parser = new JSONParser();
+    public void enviarRequisicao(String params) {
         try {
-            skt = new Socket(serverLocation, portNumber);
-            in = new BufferedReader(new InputStreamReader(skt.getInputStream()));
-            mensagem = (JSONObject) parser.parse(in);
-            System.out.println(mensagem);
-            in.close();
-            return true;
-        } catch (ConnectException e) {
+            Socket skt = new Socket(serverLocation, portNumber);
+            ObjectOutputStream requisicao = new ObjectOutputStream(skt.getOutputStream());
+            requisicao.writeObject(params);
+            ObjectInputStream resposta = new ObjectInputStream(skt.getInputStream());
+            System.out.println("Resposta do servidor:" + resposta.readObject());
+            requisicao.close();
+            resposta.close();
+            skt.close();
         } catch (Exception e) {
             System.out.print(e);
-            System.out.print("Erro no cliente!");
         }
-        return false;
     }
 
     public static void main(String args[]) {
         TCPClientSocket socket = new TCPClientSocket("localhost", 1234);
-                socket.receberMensagem();
+        socket.enviarRequisicao("olá!!!");
     }
 }
