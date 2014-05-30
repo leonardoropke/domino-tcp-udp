@@ -32,7 +32,8 @@ public class TCPClientSocket {
             ObjectOutputStream requisicao = new ObjectOutputStream(skt.getOutputStream());
             requisicao.writeObject(params);
             ObjectInputStream resposta = new ObjectInputStream(skt.getInputStream());
-            System.out.println("Resposta do servidor:" + resposta.readObject());
+            JSONObject o = (JSONObject)resposta.readObject();
+            System.out.println("Resposta do servidor:" + o);
             requisicao.close();
             resposta.close();
             skt.close();
