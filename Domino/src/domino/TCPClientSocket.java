@@ -30,9 +30,11 @@ public class TCPClientSocket {
         try {
             Socket skt = new Socket(serverLocation, portNumber);
             ObjectOutputStream requisicao = new ObjectOutputStream(skt.getOutputStream());
-            requisicao.writeObject(params);
+            JSONObject o = new JSONObject();
+            o.put("params", params);
+            requisicao.writeObject(o);
             ObjectInputStream resposta = new ObjectInputStream(skt.getInputStream());
-            JSONObject o = (JSONObject)resposta.readObject();
+            o = (JSONObject)resposta.readObject();
             System.out.println("Resposta do servidor:" + o);
             requisicao.close();
             resposta.close();
