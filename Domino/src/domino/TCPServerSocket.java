@@ -24,30 +24,24 @@ public class TCPServerSocket {
         this.portNumber = portNumber;
     }
 
-    public boolean enviarMensagem(String msg) {
+    public void enviarResposta() {
         try {
             ServerSocket srvr = new ServerSocket(portNumber);
             Socket skt = srvr.accept();
-            PrintWriter out = new PrintWriter(skt.getOutputStream(), true);
-            out.print(msg);
-            out.close();
-            skt.close();
+            ObjectInputStream requisicao = new ObjectInputStream(skt.getInputStream());
+            System.out.println("Servidor leu requisicao:" + requisicao.readObject());
+            ObjectOutputStream resposta = new ObjectOutputStream(skt.getOutputStream());
+            resposta.writeObject("tchau");
+            requisicao.close();
+            resposta.close();
             srvr.close();
-            return true;
         } catch (Exception e) {
             System.out.print(e);
         }
-        return false;
     }
 
     public static void main(String args[]) throws IOException {
         TCPServerSocket server = new TCPServerSocket(1234);
-        JSONObject o = new JSONObject();
-        o.put("metodo", "teste");
-        String mensagem = o.toJSONString();
-        //while (true) {
-           server.enviarMensagem(mensagem);
-        //}
-
+        server.enviarResposta();
     }
 }
