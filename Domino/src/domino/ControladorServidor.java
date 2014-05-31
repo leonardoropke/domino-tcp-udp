@@ -20,6 +20,23 @@ public class ControladorServidor {
     public ControladorServidor(jFrame aThis) {
         gui = aThis;
     }
+
+    public void mensagemJogadores (String msg) {
+        if (jogo.jogadorDavez == 0)
+            gui.mensagemUsuario (msg);
+        else {
+            //jogo.jogadores.get(jogadorDavez).enviarMsg();
+        }
+    }
+    
+    public void atualizaTela() {
+        gui.mostraJogo(jogo.pecasJogo);
+        gui.mostraPecasDisponiveis (jogo.pecasDisponiveis);
+        
+//        gui.mostraPecasJogador(jogadores.get(0).listaDePecas);
+        gui.atualizaRodada(jogo.rodada);
+        
+    }
     
     public void atualizaTabelaJogadores (ArrayList<Jogador> jogadores) {
         gui.atualizaTabelaJogadores(jogadores);
@@ -48,7 +65,7 @@ public class ControladorServidor {
         servidorTcp = new ServidorTCP(12345, this);
         servidorTcp.adicionaJogadores (njogadores);
       }
-    
+
     // Cada vez que um novo jogador se conectar, atualizar o jogo e a interface.
     // Se o numero maximo de jogadores for alcancado, distribuir as pecas e
     // comecar o jogo!
@@ -71,4 +88,5 @@ public class ControladorServidor {
             gui.adicionaMsg("Jogo iniciado!");
         }
     }
+
 }

@@ -6,9 +6,10 @@ import java.util.Collections;
 
 public class JogoServidor {
     ControladorServidor controlador;
-    ArrayList<Peca> pecasJogo = new ArrayList<> ();
+    public ArrayList<Peca> pecasJogo = new ArrayList<> ();
     ArrayList<Peca> pecasDisponiveis = new ArrayList<> ();
     public ArrayList<Jogador> jogadores = new ArrayList<> ();
+    int jogadorDavez;
 
     int maxJogadores;
     int rodada = 1;
@@ -69,13 +70,35 @@ public class JogoServidor {
 
     public void iniciar () {
         // Descobrir qual é o 1o jogador (quem tiver a maior peca)
-        int jogadorDavez = procuraJogadorInicial ();
+        jogadorDavez = procuraJogadorInicial ();
+
+        //****************************************************************************************************
+        // REMOVER ISSO!!! SO USEI PRA TESTAR!!!
+        jogadorDavez = 0;
+        //****************************************************************************************************
+        
         System.out.println("A peca inicial foi encontrada com o jogador "+jogadorDavez);
         jogadores.get(jogadorDavez).mostraPecas();
 
-        // Avisar para o jogador da vez jogar!
-        //  ******************************* PAREI AQUI **************************************
-        //servidor.mandaJogar(jogadores, jogadorDavez);
+        // O jogador da vez eh o usuario que roda o programa, então nao precisa
+        // de comunicacao em rede!
+        if (jogadorDavez == 0) {
+            controlador.mensagemJogadores("Sua vez de jogar!");
+            controlador.gui.destravaTela();
+        }
+        else
+            controlador.servidorTcp.controlaJogadas(jogadorDavez);
+
+    }
+    
+    public void proximoJogador() {
+        jogadorDavez++;
+        if (jogadorDavez == 0) {
+            controlador.mensagemJogadores("Sua vez de jogar!");
+            controlador.gui.destravaTela();
+        }
+        else
+            controlador.servidorTcp.controlaJogadas(jogadorDavez);
         
     }
 
