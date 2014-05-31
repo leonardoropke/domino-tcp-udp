@@ -13,9 +13,27 @@ import javax.swing.JOptionPane;
  * @author Carlos
  */
 public class jFrame extends javax.swing.JFrame {
-    ControladorServidor controladorServidor;
+    public ControladorServidor controladorServidor;
     ControladorCliente controladorCliente;
+    public boolean telaTravada = true;
+    public boolean ehServidor = false;
 
+    public void mensagemUsuario(String msg) {
+        JOptionPane.showMessageDialog(null, msg);
+    }
+    
+    public void travaTela () {
+        jButton1.setEnabled(false);
+        jButton4.setEnabled(false);
+        telaTravada = true;
+    }
+    
+    public void destravaTela () {
+        jButton1.setEnabled(true);
+        jButton4.setEnabled(true);
+        telaTravada = false;
+    }
+    
     public String getNomeJogador () {
         String nome;
         nome = jTextField2.getText();
@@ -136,6 +154,7 @@ public class jFrame extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Área de Jogo"));
 
         jButton4.setText("Pegar!");
+        jButton4.setEnabled(false);
 
         jTextField10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -191,6 +210,12 @@ public class jFrame extends javax.swing.JFrame {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Esquerdo", "Direito" }));
 
         jButton1.setText("Jogar!");
+        jButton1.setEnabled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel14.setText("Rodada:");
 
@@ -517,7 +542,8 @@ public class jFrame extends javax.swing.JFrame {
             setSize(780, 700); // [732, 621]
             //jPanel2.setVisible(false);
             jPanel1.setVisible(true);
-
+            
+            ehServidor = true;
             controladorServidor.novoJogo(njogadores);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -591,6 +617,36 @@ public class jFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        if (jTextField8.getText().isEmpty())
+            JOptionPane.showMessageDialog(null, "Digite o numero da peca desejada!");
+        else {
+            int peca = Integer.parseInt(jTextField8.getText());
+            System.out.println ("Lado selecionado: "+jComboBox1.getSelectedItem().toString());
+        
+            // Esta na hora de jogar! Se for servidor, nao precisa de comunicacao TCP!
+            if (ehServidor) {
+                travaTela();
+
+                new Thread() {
+                @Override
+                public void run() {
+                try {
+                    controladorServidor.jogo.proximoJogador();
+                }
+                catch (Exception e) { System.out.println(e); }
+                }
+                }.start();
+
+            
+            }
+            else { // Precisa de comunicacao TCP! Nossa vez de jogar como cliente!
+            
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -638,4 +694,5 @@ public class jFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
+
 }

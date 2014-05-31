@@ -5,9 +5,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+// Eh possivel que tenhamos que Jogador ser Runnable
+// pra rodar em threads... Ainda nao esta sendo usado pra nada isso.
 public class Jogador implements Runnable {
     public String nome;
-    public String ip;
     public int numJogador; // Meu numero de jogador
     public ArrayList<Peca> listaDePecas = new ArrayList<>();
 
@@ -20,17 +21,6 @@ public class Jogador implements Runnable {
         this.conexao = socket;
         this.numJogador = numJogador;
 
-    }
-
-    public void jogar () {
-        try {
-            
-         output.writeObject( "SERVER>>> " + "JOGAR!" );
-         output.flush(); // esvazia a saída para o cliente    
-
-        } catch (Exception ex) {
-            System.out.println("Deu bug!");
-        }
     }
 
     public void recebeNome () {

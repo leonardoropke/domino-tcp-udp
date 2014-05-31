@@ -21,4 +21,11 @@ public class Peca {
             return false;
     }
     
+    public void inverter () {
+        int temp;
+        temp = ladoE;
+        ladoE = ladoD;
+        ladoD = temp;
+    }
+    
 }
