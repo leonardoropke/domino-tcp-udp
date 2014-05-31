@@ -1,4 +1,4 @@
-package domino;
+package rede;
 
 
 import java.net.DatagramPacket;

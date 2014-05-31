@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package domino;
+package rede;
 
 import java.io.InputStream;
 import java.util.Scanner;
@@ -14,9 +14,9 @@ import java.util.Scanner;
 public class TrataCliente implements Runnable {
  
    private InputStream cliente;
-   private ServidorTCP servidor;
+   private ServidorTCP_old servidor;
  
-   public TrataCliente(InputStream cliente, ServidorTCP servidor) {
+   public TrataCliente(InputStream cliente, ServidorTCP_old servidor) {
      this.cliente = cliente;
      this.servidor = servidor;
    }

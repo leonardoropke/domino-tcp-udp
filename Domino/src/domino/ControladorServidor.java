@@ -3,16 +3,19 @@ package domino;
 
 import gui.jFrame;
 import java.util.ArrayList;
+import rede.ServidorTCP;
+import rede.ServidorUDP;
 
 /**
  *
  * @author Carlos
  */
 public class ControladorServidor {
-    JogoServidor jogo;
+    public JogoServidor jogo;
     int njogadores;
-    jFrame gui;
-    Servidor servidor;
+    public jFrame gui;
+    ServidorTCP servidorTcp;
+    ServidorUDP servidorUdp;
  
     public ControladorServidor(jFrame aThis) {
         gui = aThis;
@@ -26,37 +29,46 @@ public class ControladorServidor {
         gui.mostraJogo(pecas);
         gui.mostraPecasDisponiveis (pecasDisponiveis);
         
-        gui.mostraPecasJogador(jogadores.get(0).listaDePecas);
+//        gui.mostraPecasJogador(jogadores.get(0).listaDePecas);
         gui.atualizaRodada(rodada);
-        gui.adicionaMsg("Jogo iniciado!");
         
     }
     
     public void novoJogo (int nJogadores) {
   
         this.njogadores = nJogadores;
-        jogo = new JogoServidor("tcp", njogadores, this);
+        this.njogadores = 2;
         
-        // Adicionando jogadores.
-        // Quando for implementar o TCP, ler essas informacoes dos clientes!!!!
-        Jogador jogador;
-        String ipJogador = "";
-        String nomeJogador;
-        for (int i=0; i<njogadores; i++) {
-            if (i == 0)
-                nomeJogador = gui.getNomeJogador(); // O primeiro jogador eh o que esta rodando o servidor!
-            else
-                nomeJogador = "Jogador"+i;
-            jogador = new Jogador(nomeJogador, ipJogador);
-            jogo.adicionaJogador(jogador);
-            gui.adicionaMsg("Jogador '"+nomeJogador+"' conectado!");
-        }
+        jogo = new JogoServidor(njogadores, this);
         
-        jogo.preparaJogo ();
+        // O metodo adicionaJogadores() roda numa thread para permitir que a
+        // interface grafica continue funcionando enquanto espera pelos outros
+        // jogadores se conectarem.
+        // A cada nova conexao, ela executa atualizaNovoJogador()
+        servidorTcp = new ServidorTCP(12345, this);
+        servidorTcp.adicionaJogadores (njogadores);
+      }
+    
+    // Cada vez que um novo jogador se conectar, atualizar o jogo e a interface.
+    // Se o numero maximo de jogadores for alcancado, distribuir as pecas e
+    // comecar o jogo!
+    public void atualizaNovoJogador (Jogador jogador) {
         atualizaTabelaJogadores (jogo.jogadores);
         mostraJogoAtual(jogo.pecasJogo, jogo.pecasDisponiveis, jogo.jogadores, jogo.rodada);
         
-        jogo.iniciar();
+        gui.adicionaMsg("Jogador '"+jogador.nome+"' conectado!");
 
+        // Temos todos os jogadores! Iniciar o jogo!
+        if (jogo.jogadores.size() == njogadores) {
+            jogo.preparaJogo (); // Distribui pecas entre os jogadores...
+            gui.mostraPecasJogador(jogo.jogadores.get(0).listaDePecas);
+            servidorTcp.enviaPecasJogadores(); // Enviar as pecas para os jogadores...
+
+            atualizaTabelaJogadores (jogo.jogadores); // Atualiza interface grafica...
+            mostraJogoAtual(jogo.pecasJogo, jogo.pecasDisponiveis, jogo.jogadores, jogo.rodada);
+            
+            jogo.iniciar(); // Comecar!
+            gui.adicionaMsg("Jogo iniciado!");
+        }
     }
 }

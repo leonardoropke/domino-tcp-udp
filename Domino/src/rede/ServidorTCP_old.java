@@ -1,19 +1,18 @@
-package domino;
+package rede;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-public class ServidorTCP {
+public class ServidorTCP_old {
    
    private int porta;
    private List<PrintStream> clientes;
    
-   public ServidorTCP (int porta) {
+   public ServidorTCP_old (int porta) {
      this.porta = porta;
      this.clientes = new ArrayList<>();
    }

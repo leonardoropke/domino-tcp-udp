@@ -8,17 +8,13 @@ public class JogoServidor {
     ControladorServidor controlador;
     ArrayList<Peca> pecasJogo = new ArrayList<> ();
     ArrayList<Peca> pecasDisponiveis = new ArrayList<> ();
-    ArrayList<Jogador> jogadores = new ArrayList<> ();
-    
-    Servidor servidor;
+    public ArrayList<Jogador> jogadores = new ArrayList<> ();
+
     int maxJogadores;
     int rodada = 1;
-    String transporte;
     boolean jogando = false;
     
-    public JogoServidor (String transporte, int maxJogadores, ControladorServidor cont) {
-        this.transporte = transporte;
-	this.servidor = new Servidor (transporte);
+    public JogoServidor (int maxJogadores, ControladorServidor cont) {
         this.maxJogadores = maxJogadores;
         this.controlador = cont;
     }
