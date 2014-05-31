@@ -57,7 +57,7 @@ public class jFrame extends javax.swing.JFrame {
     }
     
     public void atualizaTabelaJogadores (ArrayList<Jogador> jogadores) {
-        System.out.println("Numero de jogadores: "+jogadores.size());
+        System.out.println("ATUALIZANDO tabela: Numero de jogadores: "+jogadores.size());
         String nomeJogador;
         String numPecas;
         for (int i=0; i<jogadores.size(); i++) {
@@ -147,7 +147,6 @@ public class jFrame extends javax.swing.JFrame {
 
         jTextField3.setEditable(false);
         jTextField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField3.setText("Aqui ficam as pecas disponíveis");
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
@@ -171,7 +170,6 @@ public class jFrame extends javax.swing.JFrame {
 
         jTextField9.setEditable(false);
         jTextField9.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField9.setText("Aqui ficam as pecas do jogador");
         jTextField9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField9ActionPerformed(evt);

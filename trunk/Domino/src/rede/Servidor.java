@@ -1,9 +1,9 @@
-package domino;
+package rede;
 
 public class Servidor {
     String tipo;
 	
-    Servidor (String tipo) {
+    public Servidor (String tipo) {
 	this.tipo = tipo;
     }
 

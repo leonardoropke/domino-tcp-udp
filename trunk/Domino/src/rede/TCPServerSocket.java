@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package domino;
+package rede;
 
 /**
  *
@@ -24,27 +24,30 @@ public class TCPServerSocket {
         this.portNumber = portNumber;
     }
 
-    public void enviarResposta() {
+    public boolean enviarMensagem(String msg) {
         try {
             ServerSocket srvr = new ServerSocket(portNumber);
             Socket skt = srvr.accept();
-            ObjectInputStream requisicao = new ObjectInputStream(skt.getInputStream());
-            JSONObject o = (JSONObject)requisicao.readObject();
-            System.out.println("Servidor leu requisicao:" + o);
-            ObjectOutputStream resposta = new ObjectOutputStream(skt.getOutputStream());
-            o = new JSONObject();
-            o.put("resposta","tchau");
-            resposta.writeObject(o);
-            requisicao.close();
-            resposta.close();
+            PrintWriter out = new PrintWriter(skt.getOutputStream(), true);
+            out.print(msg);
+            out.close();
+            skt.close();
             srvr.close();
+            return true;
         } catch (Exception e) {
             System.out.print(e);
         }
+        return false;
     }
 
     public static void main(String args[]) throws IOException {
         TCPServerSocket server = new TCPServerSocket(1234);
-        server.enviarResposta();
+        JSONObject o = new JSONObject();
+        o.put("metodo", "teste");
+        String mensagem = o.toJSONString();
+        //while (true) {
+           server.enviarMensagem(mensagem);
+        //}
+
     }
 }

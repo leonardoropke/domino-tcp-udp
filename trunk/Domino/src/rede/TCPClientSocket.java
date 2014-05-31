@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package domino;
+package rede;
 
 /**
  *
@@ -26,26 +26,28 @@ public class TCPClientSocket {
         this.portNumber = portNumber;
     }
 
-    public void enviarRequisicao(String params) {
+    public boolean receberMensagem() {
+        Socket skt;
+        BufferedReader in;
+        JSONObject mensagem;
+        JSONParser parser = new JSONParser();
         try {
-            Socket skt = new Socket(serverLocation, portNumber);
-            ObjectOutputStream requisicao = new ObjectOutputStream(skt.getOutputStream());
-            JSONObject o = new JSONObject();
-            o.put("params", params);
-            requisicao.writeObject(o);
-            ObjectInputStream resposta = new ObjectInputStream(skt.getInputStream());
-            o = (JSONObject)resposta.readObject();
-            System.out.println("Resposta do servidor:" + o);
-            requisicao.close();
-            resposta.close();
-            skt.close();
+            skt = new Socket(serverLocation, portNumber);
+            in = new BufferedReader(new InputStreamReader(skt.getInputStream()));
+            mensagem = (JSONObject) parser.parse(in);
+            System.out.println(mensagem);
+            in.close();
+            return true;
+        } catch (ConnectException e) {
         } catch (Exception e) {
             System.out.print(e);
+            System.out.print("Erro no cliente!");
         }
+        return false;
     }
 
     public static void main(String args[]) {
         TCPClientSocket socket = new TCPClientSocket("localhost", 1234);
-        socket.enviarRequisicao("olá!!!");
+                socket.receberMensagem();
     }
 }

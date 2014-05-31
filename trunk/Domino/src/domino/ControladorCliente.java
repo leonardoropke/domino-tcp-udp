@@ -3,6 +3,9 @@ package domino;
 
 import gui.jFrame;
 import java.util.ArrayList;
+import rede.ClienteTCP;
+import rede.ClienteUDP;
+
 
 /**
  *
@@ -11,6 +14,8 @@ import java.util.ArrayList;
 public class ControladorCliente {
     JogoCliente jogo;
     jFrame gui;
+    ClienteTCP clienteTcp;
+    ClienteUDP clienteUdp;
  
     public ControladorCliente(jFrame aThis) {
         gui = aThis;
