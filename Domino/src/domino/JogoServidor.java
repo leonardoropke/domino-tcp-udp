@@ -156,8 +156,8 @@ public class JogoServidor {
         //esse método retorna um array com todas a pecas possíveis no dominó
         ArrayList<Peca> pecas = new ArrayList<> ();
         Peca peca;
-        for (int i = 1; i <= 7; i++) {
-            for (int j = 1; j <= 7; j++) {
+        for (int i = 1; i <= 6; i++) {
+            for (int j = 1; j <= 6; j++) {
                 if (j >= i) {
                     peca = new Peca(i,j);
                     pecas.add(peca);
