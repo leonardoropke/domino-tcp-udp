@@ -1,4 +1,3 @@
-
 package gui;
 
 import domino.ControladorCliente;
@@ -13,6 +12,7 @@ import javax.swing.JOptionPane;
  * @author Carlos
  */
 public class jFrame extends javax.swing.JFrame {
+
     public ControladorServidor controladorServidor;
     ControladorCliente controladorCliente;
     public boolean telaTravada = true;
@@ -21,81 +21,85 @@ public class jFrame extends javax.swing.JFrame {
     public void mensagemUsuario(String msg) {
         JOptionPane.showMessageDialog(null, msg);
     }
-    
-    public void travaTela () {
+
+    public void travaTela() {
         jButton1.setEnabled(false);
         jButton4.setEnabled(false);
         telaTravada = true;
     }
-    
-    public void destravaTela () {
+
+    public void destravaTela() {
         jButton1.setEnabled(true);
         jButton4.setEnabled(true);
         telaTravada = false;
     }
-    
-    public String getNomeJogador () {
+
+    public String getNomeJogador() {
         String nome;
         nome = jTextField2.getText();
-        if (nome.isEmpty())
+        if (nome.isEmpty()) {
             nome = jTextField7.getText();
-        
+        }
+
         return nome;
     }
-    
-    public void mostraPecasDisponiveis (ArrayList<Peca> pecas) {
+
+    public void mostraPecasDisponiveis(ArrayList<Peca> pecas) {
         String pecasFinais = "";
-        for (int i=0; i<pecas.size(); i++)
-            pecasFinais += "Peca "+ (i+1) +
-                    //": "+pecas.get(i).toString()
-                     " || ";
+        for (int i = 0; i < pecas.size(); i++) {
+            pecasFinais += "Peca " + (i + 1)
+                    + //": "+pecas.get(i).toString()
+                    " || ";
+        }
         jTextField3.setText(pecasFinais);
     }
-    
-    public void mostraJogo (ArrayList<Peca> pecas) {
+
+    public void mostraJogo(ArrayList<Peca> pecas) {
         String pecasFinais = "";
-        for (int i=0; i<pecas.size(); i++)
+        for (int i = 0; i < pecas.size(); i++) {
             pecasFinais += pecas.get(i).toString();
+        }
         jTextField1.setText(pecasFinais);
     }
-    
-    public void mostraPecasJogador (ArrayList<Peca> pecas) {
+
+    public void mostraPecasJogador(ArrayList<Peca> pecas) {
         String pecasFinais = "";
-        for (int i=0; i<pecas.size(); i++)
+        for (int i = 0; i < pecas.size(); i++) {
             pecasFinais += pecas.get(i).toString();
-            jTextField9.setText(pecasFinais);        
+        }
+        jTextField9.setText(pecasFinais);
     }
-    
-    public void adicionaMsg (String msg) {
-        displayServidor.append(msg+"\n");
+
+    public void adicionaMsg(String msg) {
+        displayServidor.append(msg + "\n");
     }
-    
-    public void atualizaRodada (int rodada) {
+
+    public void atualizaRodada(int rodada) {
         jTextField11.setText(Integer.toString(rodada));
     }
-    
-    public void atualizaTabelaJogadores (ArrayList<Jogador> jogadores) {
-        System.out.println("ATUALIZANDO tabela: Numero de jogadores: "+jogadores.size());
+
+    public void atualizaTabelaJogadores(ArrayList<Jogador> jogadores) {
+        System.out.println("ATUALIZANDO tabela: Numero de jogadores: " + jogadores.size());
         String nomeJogador;
         String numPecas;
-        for (int i=0; i<jogadores.size(); i++) {
+        for (int i = 0; i < jogadores.size(); i++) {
             nomeJogador = jogadores.get(i).nome;
             numPecas = Integer.toString(jogadores.get(i).listaDePecas.size());
-            
+
             jTable1.getModel().setValueAt(nomeJogador, i, 0);
             jTable1.getModel().setValueAt(numPecas, i, 1);
-            System.out.println("Jogador: '"+nomeJogador+"' | nPecas: "+numPecas);
+            System.out.println("Jogador: '" + nomeJogador + "' | nPecas: " + numPecas);
         }
     }
-    
+
     public jFrame() {
         initComponents();
 
         jPanel1.setVisible(false);
         setSize(780, 240); // [732, 621]
-        
+
         setVisible(true);
-        
+
     }
 
     /**
@@ -528,21 +532,20 @@ public class jFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+
         // Criar uma instancia de servidor!
-        controladorServidor = new ControladorServidor(this);        
-        
+        controladorServidor = new ControladorServidor(this);
+
         // TODOs os jogos terao SEMPRE 4 jogadores
         int njogadores = 4;
-        
+
         if (jTextField2.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Digite o seu nome!");
-        }
-        else {
+        } else {
             setSize(780, 700); // [732, 621]
             //jPanel2.setVisible(false);
             jPanel1.setVisible(true);
-            
+
             ehServidor = true;
             controladorServidor.novoJogo(njogadores);
         }
@@ -575,7 +578,6 @@ public class jFrame extends javax.swing.JFrame {
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         // TODO add your handling code here:
         //jRadioButton2.setEnabled(false);
-        
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
@@ -584,73 +586,94 @@ public class jFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+
         // Criar uma instancia de cliente!
         controladorCliente = new ControladorCliente(this);
-        
+
         // if (jRadioButton1.isSelected()) ... bla bla bla
-        
+
         String ip = jTextField5.getText();
-        int porta=0;
-        if (!jTextField6.getText().isEmpty())
+        int porta = 0;
+        if (!jTextField6.getText().isEmpty()) {
             porta = Integer.parseInt(jTextField6.getText());
+        }
         String nomeJogador = jTextField7.getText();
-        
-        
-        if (jTextField6.getText().isEmpty())
+
+
+        if (jTextField6.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Digite a porta!");
-        else
-            if (ip.isEmpty())
-                JOptionPane.showMessageDialog(null, "Digite o IP!");
-            else
-                if (nomeJogador.isEmpty())
-                    JOptionPane.showMessageDialog(null, "Digite o seu nome!");
-                else {
-                    setSize(780, 700); // [732, 621]
-                    //jPanel2.setVisible(false);
-                    jPanel1.setVisible(true);
-                    
-                    // Lidos os dados, iniciar uma conexao com o servidor e esperar o inicio do jogo!
-                    controladorCliente.novoJogo(ip, porta, nomeJogador);
-                }
-        
-        
+        } else if (ip.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite o IP!");
+        } else if (nomeJogador.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite o seu nome!");
+        } else {
+            setSize(780, 700); // [732, 621]
+            //jPanel2.setVisible(false);
+            jPanel1.setVisible(true);
+
+            // Lidos os dados, iniciar uma conexao com o servidor e esperar o inicio do jogo!
+            controladorCliente.novoJogo(ip, porta, nomeJogador);
+        }
+
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        if (jTextField8.getText().isEmpty())
+
+        if (jTextField8.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Digite o numero da peca desejada!");
-        else {
+        } else {
             int peca = Integer.parseInt(jTextField8.getText());
-            System.out.println ("Lado selecionado: "+jComboBox1.getSelectedItem().toString());
-        
+            String lado = jComboBox1.getSelectedItem().toString();
+            System.out.println("Lado selecionado: " + lado);
+
             // Esta na hora de jogar! Se for servidor, nao precisa de comunicacao TCP!
             if (ehServidor) {
-                travaTela();
 
-                new Thread() {
-                @Override
-                public void run() {
-                try {
-                    controladorServidor.jogo.proximoJogador();
-                }
-                catch (Exception e) { System.out.println(e); }
-                }
-                }.start();
+                // 1- Ler e validar peca (1 a 6)
+                // 2- Retirar peca x do array jogador.pecasJogador
+                // 3- Inserir essa peca no array jogador
+                int npecas = controladorServidor.jogo.jogadores.get(0).listaDePecas.size();
+                System.out.println("Peca: " + peca);
+                System.out.println("npeca: " + npecas);
+                if ((peca >= 1) && (peca <= npecas)) {
+                    System.out.println("Testar se jogada eh valida!");
 
-            
-            }
-            else { // Precisa de comunicacao TCP! Nossa vez de jogar como cliente!
-            
+                    Jogador jogador = controladorServidor.jogo.jogadores.get(0);
+                    Peca pecaSelecionada = jogador.listaDePecas.get(peca - 1);
+
+                    if (controladorServidor.jogo.jogadaValida(jogador, pecaSelecionada, lado)) {
+                        System.out.println("Jogada valida do usuario 0 !");
+
+                        // Travar a tela e chamar o proximo jogador
+                        travaTela();
+                        new Thread() {
+
+                            @Override
+                            public void run() {
+                                try {
+                                    controladorServidor.jogo.proximoJogador();
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                }
+                            }
+                        }.start();
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Jogada invalida!");
+                    }
+
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Digite um valor entre 1 e " + npecas + "!");
+                }
+            } else { // Precisa de comunicacao TCP! Nossa vez de jogar como cliente!
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
     /**
      * @param args the command line arguments
      */
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextArea displayServidor;
@@ -694,5 +717,4 @@ public class jFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
-
 }
