@@ -183,39 +183,46 @@ public class JogoServidor {
     
     public boolean jogadaValida(Jogador jogador, Peca peca, String lado) {
         boolean aceitou = false;
+        
+        if (lado.equals("Esquerdo")) lado = "esq";
+        if (lado.equals("Direito")) lado = "dir";
+
         Peca pEsq = controlador.jogo.pecasJogo.get(0);
         Peca pDir = controlador.jogo.pecasJogo.get(controlador.jogo.pecasJogo.size() - 1);
 
         System.out.println("Peca da esquerda: " + pEsq);
         System.out.println("Peca da direita: " + pDir);
         System.out.println("Peca desejada: " + peca);
-
-        // Tentar encaixar do lado ESQUERDO do jogo atual
-        if (peca.ladoE == pEsq.ladoE) {
-            // Pode encaixar, mas tem que inverter a peca!
-            peca.inverter();
-//            controlador.jogo.pecasJogo.add(0, peca);
-            avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
-            return true;
-        } else if (peca.ladoD == pEsq.ladoE) {
-            // Pode encaixar perfeitamente!
-//            controlador.jogo.pecasJogo.add(0, peca);
-            avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
-            return true;
+        System.out.println("Lado: "+lado);
+        if (lado.equals("esq")) {
+            System.out.println("Tentando encaixar do lado esquerdo!");
+            // Tentar encaixar do lado ESQUERDO do jogo atual
+            if (peca.ladoE == pEsq.ladoE) {
+                // Pode encaixar, mas tem que inverter a peca!
+                peca.inverter();
+                avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
+                return true;
+            }
+            else if (peca.ladoD == pEsq.ladoE) {
+                // Pode encaixar perfeitamente!
+                avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
+                return true;
+            }
         }
-
-        // Tentar encaixar do lado DIREITO do jogo atual
-        if (peca.ladoE == pDir.ladoD) {
-            // Pode encaixar perfeitamente!
-//            controlador.jogo.pecasJogo.add(peca);
-            avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
-            return true;
-        } else if (peca.ladoD == pDir.ladoD) {
-            // Pode encaixar, mas tem que inverter a peca!
-            peca.inverter();
-//            controlador.jogo.pecasJogo.add(peca);
-            avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
-            return true;
+        
+        if (lado.equals("dir")) {
+            // Tentar encaixar do lado DIREITO do jogo atual
+            System.out.println("Tentando encaixar do lado direito!");
+            if (peca.ladoE == pDir.ladoD) {
+                // Pode encaixar perfeitamente!
+                avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
+                return true;
+            } else if (peca.ladoD == pDir.ladoD) {
+                // Pode encaixar, mas tem que inverter a peca!
+                peca.inverter();
+                avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
+                return true;
+            }
         }
 
         return aceitou;
@@ -224,6 +231,7 @@ public class JogoServidor {
     // Uma jogada foi feita por um jogador. Avisar outros usuarios!
     public void avisarOutrosJogadores(Jogador jogadorJogou, Peca peca, String lado) {
         Jogador jogador;
+        
         System.out.println("Avisar outros jogadores!!!");
         for (int i = 0; i < controlador.jogo.maxJogadores; i++) {
             jogador = controlador.jogo.jogadores.get(i);
@@ -236,7 +244,7 @@ public class JogoServidor {
                 
             } else if (jogador.numJogador != jogadorJogou.numJogador) {
                 try {
-                    String jogada = "jogada " + peca.toString() + lado;
+                    String jogada = "jogada " + peca.toString() +" "+ lado;
                     System.out.println("Jogada: '" + jogada + "'");
                     jogador.output.writeObject(jogada);
                     jogador.output.flush();
