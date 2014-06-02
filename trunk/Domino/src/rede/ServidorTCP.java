@@ -163,7 +163,8 @@ public class ServidorTCP {
                 System.out.println("Lado: '" + lado + "'");
 
                 // Aqui ja sabemos a peca e o lado. Validar a jogada!
-                if (jogadaValida(jogador, peca, lado)) {
+                if (controlador.jogo.jogadaValida(jogador, peca, lado)) {
+
                     System.out.println("Jogada valida!");
                     controlador.atualizaTela();
                     controlador.jogo.proximoJogador();
@@ -179,75 +180,6 @@ public class ServidorTCP {
         } catch (Exception ex) {
             System.out.println("Deu bug!" + ex);
         }
-    }
-
-    private boolean jogadaValida(Jogador jogador, Peca peca, String lado) {
-        boolean aceitou = false;
-        Peca pEsq = controlador.jogo.pecasJogo.get(0);
-        Peca pDir = controlador.jogo.pecasJogo.get(controlador.jogo.pecasJogo.size() - 1);
-
-        System.out.println("Peca da esquerda: " + pEsq);
-        System.out.println("Peca da direita: " + pDir);
-        System.out.println("Peca desejada: " + peca);
-
-        // Tentar encaixar do lado ESQUERDO do jogo atual
-        if (peca.ladoE == pEsq.ladoE) {
-            // Pode encaixar, mas tem que inverter a peca!
-            peca.inverter();
-            controlador.jogo.pecasJogo.add(0, peca);
-            avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
-            return true;
-        } else if (peca.ladoD == pEsq.ladoE) {
-            // Pode encaixar perfeitamente!
-            controlador.jogo.pecasJogo.add(0, peca);
-            avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
-            return true;
-        }
-
-        // Tentar encaixar do lado DIREITO do jogo atual
-        if (peca.ladoE == pDir.ladoD) {
-            // Pode encaixar perfeitamente!
-            controlador.jogo.pecasJogo.add(peca);
-            avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
-            return true;
-        } else if (peca.ladoD == pDir.ladoD) {
-            // Pode encaixar, mas tem que inverter a peca!
-            peca.inverter();
-            controlador.jogo.pecasJogo.add(peca);
-            avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
-            return true;
-        }
-
-        return aceitou;
-    }
-
-    // Uma jogada foi feita por um jogador. Avisar outros usuarios!
-    private void avisarOutrosJogadores(Jogador jogadorJogou, Peca peca, String lado) {
-        Jogador jogador;
-        System.out.println("Avisar outros jogadores!!!");
-        for (int i = 0; i <= controlador.jogo.maxJogadores; i++) {
-            jogador = controlador.jogo.jogadores.get(i);
-            if (jogador.numJogador == 0) {
-                if(lado == "dir"){
-                    controlador.jogo.pecasJogo.add(peca);
-                }else{
-                    controlador.jogo.pecasJogo.add(0, peca);
-                }
-                
-            } else if (jogador.numJogador != jogadorJogou.numJogador) {
-                try {
-                    String jogada = "jogada " + peca.toString() + lado;
-                    System.out.println("Jogada: '" + jogada + "'");
-                    jogador.output.writeObject(jogada);
-                    jogador.output.flush();
-
-                } catch (Exception e) {
-                    System.out.println("Nao consegui avisar os jogadores da jogada de '" + jogador.nome + "'!");
-                }
-            }
-
-        }
-
     }
 
 }
