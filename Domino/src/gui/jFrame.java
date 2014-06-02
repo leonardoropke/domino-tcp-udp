@@ -65,7 +65,7 @@ public class jFrame extends javax.swing.JFrame {
     public void mostraPecasJogador(ArrayList<Peca> pecas) {
         String pecasFinais = "";
         for (int i = 0; i < pecas.size(); i++) {
-            pecasFinais += pecas.get(i).toString();
+            pecasFinais += pecas.get(i).toString()+" ";
         }
         jTextField9.setText(pecasFinais);
     }
@@ -634,16 +634,19 @@ public class jFrame extends javax.swing.JFrame {
                 // 2- Retirar peca x do array jogador.pecasJogador
                 // 3- Inserir essa peca no array jogador
                 int npecas = controladorServidor.jogo.jogadores.get(0).listaDePecas.size();
-                System.out.println("Peca: " + peca);
+                System.out.println("peca: " + peca);
                 System.out.println("npeca: " + npecas);
                 if ((peca >= 1) && (peca <= npecas)) {
                     System.out.println("Testar se jogada eh valida!");
 
                     Jogador jogador = controladorServidor.jogo.jogadores.get(0);
                     Peca pecaSelecionada = jogador.listaDePecas.get(peca - 1);
-
+                    
                     if (controladorServidor.jogo.jogadaValida(jogador, pecaSelecionada, lado)) {
                         System.out.println("Jogada valida do usuario 0 !");
+                        jogador.removePeca(pecaSelecionada);
+                        controladorServidor.atualizaTela();
+                        mostraPecasJogador(jogador.listaDePecas);
 
                         // Travar a tela e chamar o proximo jogador
                         travaTela();

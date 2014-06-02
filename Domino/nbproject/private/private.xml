@@ -4,10 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
         <file>file:/C:/Users/Carlos/Documents/UFF/5o%20Periodo/Redes%201/domino-tcp-udp/Domino/src/domino/ControladorServidor.java</file>
         <file>file:/C:/Users/Carlos/Documents/UFF/5o%20Periodo/Redes%201/domino-tcp-udp/Domino/src/domino/JogoServidor.java</file>
+        <file>file:/C:/Users/Carlos/Documents/UFF/5o%20Periodo/Redes%201/domino-tcp-udp/Domino/src/rede/ServidorTCP.java</file>
+        <file>file:/C:/Users/Carlos/Documents/UFF/5o%20Periodo/Redes%201/domino-tcp-udp/Domino/src/domino/Jogador.java</file>
         <file>file:/C:/Users/Carlos/Documents/UFF/5o%20Periodo/Redes%201/domino-tcp-udp/Domino/src/domino/Peca.java</file>
-        <file>file:/C:/Users/Carlos/Documents/UFF/5o%20Periodo/Redes%201/domino-tcp-udp/Domino/src/gui/jFrame.java</file>
         <file>file:/C:/Users/Carlos/Documents/UFF/5o%20Periodo/Redes%201/domino-tcp-udp/Domino/src/domino/ControladorCliente.java</file>
         <file>file:/C:/Users/Carlos/Documents/UFF/5o%20Periodo/Redes%201/domino-tcp-udp/Domino/src/domino/JogoCliente.java</file>
-        <file>file:/C:/Users/Carlos/Documents/UFF/5o%20Periodo/Redes%201/domino-tcp-udp/Domino/src/domino/Jogador.java</file>
+        <file>file:/C:/Users/Carlos/Documents/UFF/5o%20Periodo/Redes%201/domino-tcp-udp/Domino/src/gui/jFrame.java</file>
     </open-files>
 </project-private>
