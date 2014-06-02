@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package rede;
+package domino;
 
 /**
  *
@@ -28,8 +28,13 @@ public class TCPServerSocket {
         try {
             ServerSocket srvr = new ServerSocket(portNumber);
             Socket skt = srvr.accept();
+            BufferedReader in = new BufferedReader(new InputStreamReader(skt.getInputStream()));
+            JSONParser parser = new JSONParser();
+            JSONObject params = (JSONObject) parser.parse(in);
             PrintWriter out = new PrintWriter(skt.getOutputStream(), true);
-            out.print(msg);
+            JSONObject resposta = new JSONObject();
+            resposta.put("resposta", (String) params.get("mensagem"));
+            out.print(resposta);
             out.close();
             skt.close();
             srvr.close();
@@ -39,6 +44,7 @@ public class TCPServerSocket {
         }
         return false;
     }
+    
 
     public static void main(String args[]) throws IOException {
         TCPServerSocket server = new TCPServerSocket(1234);

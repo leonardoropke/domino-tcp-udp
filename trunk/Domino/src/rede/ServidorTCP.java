@@ -129,6 +129,7 @@ public class ServidorTCP {
     private void receberJogada(Jogador jogador) {
         String recebido;
         String comando;
+       
         Peca peca;
         String pecaString;
         String lado;
@@ -142,6 +143,11 @@ public class ServidorTCP {
          
              if (recebido.contains("comprar")) { // Tratar opcao de compra de pecas
                  System.out.println("Jogador '"+jogador.nome+"' quer comprar pecas!");
+                 comando = recebido.substring(0, recebido.indexOf(" "));
+                 String indexPecaString = recebido.substring(recebido.indexOf(" "));
+                 int indexPecaDisponivel = Integer.parseInt(indexPecaString);
+                 controlador.jogo.compraPeca(jogador, indexPecaDisponivel);
+                 
              }
              else if (recebido.contains("jogar")) { // Tratar jogada
                  System.out.println("Jogador '"+jogador.nome+"' quer jogar!");
@@ -165,7 +171,7 @@ public class ServidorTCP {
                  if (jogadaValida (jogador, peca, lado)) {
                      System.out.println("Jogada valida!");
                      controlador.atualizaTela();
-
+                     controlador.jogo.proximoJogador();
                      return;
                  }
                  else { // Jogada nao eh valida! Avisar o jogador e esperar outra jogada!
