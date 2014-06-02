@@ -11,7 +11,7 @@ public class JogoServidor {
     public ArrayList<Jogador> jogadores = new ArrayList<>();
     int jogadorDavez;
 
-    int maxJogadores;
+    public int maxJogadores;
     int rodada = 1;
     boolean jogando = false;
 
