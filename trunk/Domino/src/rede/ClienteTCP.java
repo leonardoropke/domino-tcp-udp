@@ -8,189 +8,137 @@ package rede;
  *
  * @author Carlos
  */
-
-// Fig. 24.7: Client.java
 // Cliente que lê e exibe as informações enviadas a partir de um Servidor.
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import domino.ControladorCliente;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import javax.swing.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class ClienteTCP extends JFrame 
-{
-   private JTextField enterField; // insere informações fornecidas pelo usuário
-   private JTextArea displayArea; // exibe informações para o usuário
-   private ObjectOutputStream output; // gera o fluxo de saída para o servidor
-   private ObjectInputStream input; // gera o fluxo de entrada a partir do servidor
-   private String message = ""; // mensagem do servidor
-   private String chatServer; // servidor de host para esse aplicativo
-   private Socket client; // socket para comunicação com o servidor
+public class ClienteTCP {
 
-   // inicializa chatServer e configura a GUI
-   public ClienteTCP( String host )
-   {
-      super( "Client" );
+    public ObjectOutputStream output;
+    public ObjectInputStream input;
+    private String recebido = "";
+    private Socket client;
+    private ControladorCliente controlador;
+    boolean podeler = false;
 
-      chatServer = host; // configura o servidor ao qual esse cliente se conecta
+    // inicializa chatServer e configura a GUI
+    public ClienteTCP(ControladorCliente aThis) {
+        this.controlador = aThis;
 
-      enterField = new JTextField(); // cria enterField
-      enterField.setEditable( false );
-      enterField.addActionListener(
-         new ActionListener() 
-         {
-            // envia mensagem ao servidor
+    }
+
+    public void conecta(final String ip, final int porta, final String nomeJogador) {
+
+        try {
+            client = new Socket(InetAddress.getByName(ip), porta);
+            System.out.println("Connected to: "
+                    + client.getInetAddress().getHostName());
+
+            output = new ObjectOutputStream(client.getOutputStream());
+            output.flush(); // esvazia buffer de saída enviar as informações de cabeçalho
+
+            // configura o fluxo de entrada para objetos
+            input = new ObjectInputStream(client.getInputStream());
+
+            System.out.println("Got I/O streams\n");
+
+            output.writeObject(nomeJogador);
+            output.flush(); // esvazia os dados para saída      
+
+
+        } catch (Exception e) {
+        }
+
+    }
+
+    public void recebeComandos() {
+
+        new Thread() {
+
             @Override
-            public void actionPerformed( ActionEvent event )
-            {
-               sendData( event.getActionCommand() );
-               enterField.setText( "" );
-            } // fim do método actionPerformed
-         } // fim da classe interna anônima
-      ); // fim da chamada para addActionListener
+            public void run() {
 
-      add( enterField, BorderLayout.NORTH );
+                try {
+                    recebido = (String) input.readObject();
+                    processaComandos();
 
-      displayArea = new JTextArea(); // cria displayArea
-      add( new JScrollPane( displayArea ), BorderLayout.CENTER );
+                } catch (Exception ex) {
+                    System.out.println("Erro ao ler comando do servidor!");
+                }
 
-      setSize( 300, 150 ); // configura o tamanho da janela
-      setVisible( true ); // mostra a janela
-   } // fim do construtor Client
+            }
+        }.start();
 
-   // conecta-se ao servidor e processa as mensagens a partir do servidor
-   public void runClient() 
-   {
-      try // conecta-se ao servidor, obtém fluxos, processa a conexão
-      {
-         connectToServer(); // cria um Socket para fazer a conexão
-         getStreams(); // obtém os fluxos de entrada e saída
-         processConnection(); // processa a conexão
-      } // fim do try
-      catch ( EOFException eofException ) 
-      {
-         displayMessage( "\nClient terminated connection" );
-      } // fim do catch
-      catch ( IOException ioException ) 
-      {
-      } // fim do catch
-      finally 
-      {
-         closeConnection(); // fecha a conexão
-      } // fim de finally
-   } // fim do método runClient
+    }
 
-   // conecta-se ao servidor
-   private void connectToServer() throws IOException
-   {      
-      displayMessage( "Attempting connection\n" );
+    public void processaComandos() {
 
-      // cria Socket fazer a conexão ao servidor
-      client = new Socket( InetAddress.getByName( chatServer ), 12345 );
+        String comando = "";
+        boolean fim = false;
 
-      // exibe informações sobre a conexão
-      displayMessage( "Connected to: " + 
-         client.getInetAddress().getHostName() );
-   } // fim do método connectToServer
+        String temp = recebido;
 
-   // obtém fluxos para enviar e receber dados
-   private void getStreams() throws IOException
-   {
-      // configura o fluxo de saída para objetos
-      output = new ObjectOutputStream( client.getOutputStream() );     
-      output.flush(); // esvazia buffer de saída enviar as informações de cabeçalho
+        System.out.println("Recebido do servidor: " + recebido);
+        if (temp.equals("jogar")) {
+            comando = "jogar";
+        } else {
+            comando = temp.substring(0, temp.indexOf(" "));
+        }
+        System.out.println("Comando: '" + comando + "'");
+        // 1o comando recebido: 'receber peca1 peca2 peca3...'
+        switch (comando) {
+            case "jogadores": // OK
+                System.out.println("Comando jogadores!!");
+                System.out.println("Numero de jogador: " + temp.substring(10, 11));
+                controlador.jogo.recebeJogadores(Integer.parseInt(temp.substring(10, 11)), temp.substring(11, temp.length()));
+                break;
+            case "receber": // OK
+                System.out.println("Comando receber!");
+                controlador.jogo.recebePecas(temp.substring(temp.indexOf(" ") + 1, temp.length()));
+                break;
+            case "msg": // OK
+                System.out.println("Comando mensagem!");
+                controlador.gui.adicionaMsg(temp.substring(temp.indexOf(" ") + 1, temp.length()));
+                break;
+            case "jogada": // Recebe uma jogada no formato 'jogada [3:2] esq
+                System.out.println("Comando jogada!");
+                controlador.jogo.recebeJogada(temp.substring(temp.indexOf(" ") + 1, temp.length()));
+                break;
+            case "jogar":
+                System.out.println("Comando jogar!");
+                controlador.alertaUsuario("Sua vez de jogar!");
+                controlador.gui.destravaTela();
 
-      // configura o fluxo de entrada para objetos
-      input = new ObjectInputStream( client.getInputStream() );
+                break;
+            case "fimdejogo":
+                System.out.println("Comando fimdejogo!");
+                fim = true;
+                break;
 
-      displayMessage( "\nGot I/O streams\n" );
-   } // fim do método getStreams
+        }
 
-   // processa a conexão com o servidor
-   private void processConnection() throws IOException
-   {
-      // ativa enterField de modo que o usuário cliente possa enviar mensagens
-      setTextFieldEditable( true );
+        System.out.println("Temp no final: '" + temp + "'");
+        recebeComandos();
 
-      do // processa as mensagens enviadas do servidor
-      { 
-         try // lê e exibe a mensagem
-         {
-            message = ( String ) input.readObject(); // lê uma nova mensagem
-            displayMessage( "\n" + message ); // exibe a mensagem
-         } // fim do try
-         catch ( ClassNotFoundException classNotFoundException ) 
-         {
-            displayMessage( "\nUnknown object type received" );
-         } // fim do catch
 
-      } while ( !message.equals( "SERVER>>> TERMINATE" ) );
-   } // fim do método processConnection
+    }
 
-   // fecha os fluxos e o socket
-   private void closeConnection() 
-   {
-      displayMessage( "\nClosing connection" );
-      setTextFieldEditable( false ); // desativa enterField
+    // fecha os fluxos e o socket
+    private void closeConnection() {
+        System.out.println("Closing connection");
 
-      try 
-      {
-         output.close(); // fecha o fluxo de saída
-         input.close(); // fecha o fluxo de entrada
-         client.close(); // fecha o socket   
-      } // fim do try
-      catch ( IOException ioException ) 
-      {
-      } // fim do catch
-   } // fim do método closeConnection
-
-   // envia mensagem ao servidor
-   private void sendData( String message )
-   {
-      try // envia o objeto ao servidor
-      {
-         output.writeObject( "CLIENT>>> " + message );
-         output.flush(); // esvazia os dados para saída      
-         displayMessage( "\nCLIENT>>> " + message );
-      } // fim do try
-      catch ( IOException ioException )
-      {
-         displayArea.append( "\nError writing object" );
-      } // fim do catch
-   } // fim do método sendData
-
-   // manipula a displayArea na thread de despacho de eventos
-   private void displayMessage( final String messageToDisplay )
-   {
-      SwingUtilities.invokeLater(
-         new Runnable()
-         {
-            @Override
-            public void run() // atualiza a displayArea 
-            {
-               displayArea.append( messageToDisplay );
-            } // fim do método run
-         }  // fim da classe interna anônima
-      ); // fim da chamada para SwingUtilities.invokeLater
-   } // fim do método displayMessage
-
-   // manipula o enterField na thread de despacho de eventos
-   private void setTextFieldEditable( final boolean editable )
-   {
-      SwingUtilities.invokeLater(
-         new Runnable() 
-         {
-            @Override
-            public void run() // configura a editabilidade do enterField
-            {
-               enterField.setEditable( editable );
-            } // fim do método run
-         } // fim da classe interna anônima
-      ); // fim da chamada para SwingUtilities.invokeLater
-   } // fim do método setTextFieldEditable
-} // fim da classe Client
+        try {
+            output.close();
+            input.close();
+            client.close();
+        } catch (IOException ioException) {
+        }
+    }
+}

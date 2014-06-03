@@ -14,19 +14,15 @@ public class ControladorServidor {
     public JogoServidor jogo;
     int njogadores;
     public jFrame gui;
-    ServidorTCP servidorTcp;
-    ServidorUDP servidorUdp;
+    public ServidorTCP servidorTcp;
+    public ServidorUDP servidorUdp;
 
     public ControladorServidor(jFrame aThis) {
         gui = aThis;
     }
 
     public void alertaUsuario(String msg) {
-        if (jogo.jogadorDavez == 0) {
             gui.alertaUsuario(msg);
-        } else {
-            //jogo.jogadores.get(jogadorDavez).enviarMsg();
-        }
     }
 
     public void adicionaMsg (String msg) {
@@ -78,6 +74,9 @@ public class ControladorServidor {
         atualizaTabelaJogadores(jogo.jogadores);
         mostraJogoAtual(jogo.pecasJogo, jogo.pecasDisponiveis, jogo.jogadores, jogo.rodada);
 
+        if (jogo.jogadores.size() == 1)
+            gui.adicionaMsg("Servidor rodando! IP: "+ servidorTcp.server.getInetAddress().getHostAddress()+" Porta: "+12345);        
+        
         gui.adicionaMsg("Jogador '" + jogador.nome + "' conectado!");
 
         // Temos todos os jogadores! Iniciar o jogo!
@@ -91,6 +90,7 @@ public class ControladorServidor {
     public void comecaRodada() {
         jogo.preparaJogo(); // Distribui pecas entre os jogadores...
         gui.mostraPecasJogador(jogo.jogadores.get(0).listaDePecas);
+        servidorTcp.enviaNomesJogadores();
         servidorTcp.enviaPecasJogadores(); // Enviar as pecas para os jogadores...
 
         atualizaTabelaJogadores(jogo.jogadores); // Atualiza interface grafica...

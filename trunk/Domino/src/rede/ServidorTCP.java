@@ -8,21 +8,17 @@ import domino.ControladorServidor;
 import domino.Jogador;
 import domino.Peca;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 
 public class ServidorTCP {
 
-    private ServerSocket server; // socket de servidor     
-
-    private int counter = 1; // contador do número de conexões
-    private int porta = 0;
+    public ServerSocket server; // socket de servidor     
 
     private ControladorServidor controlador;
 
     // configura a GUI
     public ServidorTCP(int porta, ControladorServidor aThis) {
-        this.porta = porta;
+
         this.controlador = aThis;
 
         try {
@@ -70,6 +66,11 @@ public class ServidorTCP {
         controlador.jogo.adicionaJogador(jogador);
         controlador.atualizaNovoJogador(jogador);
 
+        /*
+        if (controlador.jogo.jogadores.size() == 0)
+            controlador.adicionaMsg("Servidor rodando! IP: "+ controlador.servidorTcp.server.getInetAddress().getHostAddress()+" Porta: "+12345);        
+*/
+        
         new Thread() {
             @Override
             public void run() {
@@ -106,6 +107,23 @@ public class ServidorTCP {
         }
     }
 
+    public void enviaNomesJogadores() {
+        try {
+            String nomes="";
+            Jogador jogador;
+            for (int i=0; i<=controlador.jogo.jogadores.size()-1; i++)
+                nomes += controlador.jogo.jogadores.get(i).nome+" ";
+            
+            for (int i=1; i<=controlador.jogo.jogadores.size()-1; i++) {
+                jogador = controlador.jogo.jogadores.get(i);
+                jogador.output.writeObject("jogadores "+jogador.numJogador+" "+nomes);
+                jogador.output.flush();
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao mandar fim de rodada o jogador!");
+        }
+    }
+    
     // Quando mandar este comando, o cliente deve destravar a tela, permitir a jogada e
     // travar a tela novamente
     public void controlaJogadas(int jogadorDavez) {
@@ -199,7 +217,6 @@ public class ServidorTCP {
         } catch (Exception e) {
             System.out.println("Erro ao mandar fim de rodada o jogador!");
         }
-        
     }
 
     public void avisaFimJogo(Jogador jogador, int pontosA, int pontosB) {
