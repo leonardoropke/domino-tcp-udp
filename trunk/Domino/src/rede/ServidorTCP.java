@@ -46,6 +46,17 @@ public class ServidorTCP {
             System.out.println("Nao consegui fechar a conexao!");
         }
     }
+    
+    // Envia uma mensagem para o 'jogador', na caixa de mensagens do servidor
+    public void adicionaMsg (Jogador jogador, String msg) {
+        try {
+            jogador.output.writeObject("msg "+msg);
+            jogador.output.flush();
+        } catch (Exception e) {
+            System.out.println("Erro ao mandar mensagem para o jogador! ("+msg+")");
+        }
+        
+    }
 
     public void adicionaJogadores(final int njogadores) {
         final String nomeJogador = "";
@@ -131,8 +142,12 @@ public class ServidorTCP {
             // 2- O cliente fez uma jogada: receber pecas (e comunicar os outros jogadores)
 
             recebido = (String) jogador.input.readObject();
-
-            if (recebido.contains("comprar")) { // Tratar opcao de compra de pecas
+            
+            if (recebido.contains ("pular")) {
+                controlador.atualizaTela();
+                controlador.jogo.proximoJogador(new Peca (0,0));
+            }
+            else if (recebido.contains("comprar")) { // Tratar opcao de compra de pecas
                 System.out.println("Jogador '" + jogador.nome + "' quer comprar pecas!");
                 comando = recebido.substring(0, recebido.indexOf(" "));
                 String indexPecaString = recebido.substring(recebido.indexOf(" "));
@@ -175,6 +190,26 @@ public class ServidorTCP {
         } catch (Exception ex) {
             System.out.println("Deu bug!" + ex);
         }
+    }
+
+    public void avisaFimRodada(Jogador jogador, int pontosA, int pontosB) {
+        try {
+            jogador.output.writeObject("fimrodada "+pontosA+" "+pontosB);
+            jogador.output.flush();
+        } catch (Exception e) {
+            System.out.println("Erro ao mandar fim de rodada o jogador!");
+        }
+        
+    }
+
+    public void avisaFimJogo(Jogador jogador, int pontosA, int pontosB) {
+        try {
+            jogador.output.writeObject("fimjogo "+pontosA+" "+pontosB);
+            jogador.output.flush();
+        } catch (Exception e) {
+            System.out.println("Erro ao mandar fim de jogo para o jogador!");
+        }
+        
     }
 
 }
