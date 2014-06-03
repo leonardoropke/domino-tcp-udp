@@ -100,6 +100,20 @@ public class ServidorTCP {
         }.start();
 
     }
+    
+    public void enviaPecasDisponiveisJogadores() {
+        try {
+            Jogador jogador;
+
+            for (int i = 1; i <= controlador.jogo.jogadores.size() - 1; i++) {
+                jogador = controlador.jogo.jogadores.get(i);
+                jogador.output.writeObject("ndisponiveis " + controlador.jogo.pecasDisponiveis.size());
+                jogador.output.flush();
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao mandar o numero de pecas disponiveis para o jogador!");
+        }
+    }
 
     public void enviaPecasJogadores() {
         Jogador jogador;

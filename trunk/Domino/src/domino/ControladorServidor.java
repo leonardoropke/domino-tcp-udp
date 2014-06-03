@@ -39,7 +39,7 @@ public class ControladorServidor {
 
     public void atualizaTela() {
         gui.mostraJogo(jogo.pecasJogo);
-        gui.mostraPecasDisponiveis(jogo.pecasDisponiveis);
+        gui.mostraPecasDisponiveis(jogo.pecasDisponiveis.size());
         gui.atualizaRodada(jogo.rodada);
 
     }
@@ -50,7 +50,7 @@ public class ControladorServidor {
 
     public void mostraJogoAtual(ArrayList<Peca> pecas, ArrayList<Peca> pecasDisponiveis, ArrayList<Jogador> jogadores, int rodada) {
         gui.mostraJogo(pecas);
-        gui.mostraPecasDisponiveis(pecasDisponiveis);
+        gui.mostraPecasDisponiveis(pecasDisponiveis.size());
         gui.atualizaRodada(rodada);
 
     }
@@ -103,6 +103,7 @@ public class ControladorServidor {
         gui.mostraPecasJogador(jogo.jogadores.get(0).listaDePecas);
         servidorTcp.enviaNomesJogadores();
         servidorTcp.enviaPecasJogadores(); // Enviar as pecas para os jogadores...
+        servidorTcp.enviaPecasDisponiveisJogadores();
 
         atualizaTabelaJogadores(jogo.jogadores); // Atualiza interface grafica...
         mostraJogoAtual(jogo.pecasJogo, jogo.pecasDisponiveis, jogo.jogadores, jogo.rodada);

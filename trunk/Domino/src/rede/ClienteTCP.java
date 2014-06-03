@@ -103,6 +103,10 @@ public class ClienteTCP {
                 System.out.println("Comando receber!");
                 controlador.jogo.recebePecas(temp.substring(temp.indexOf(" ") + 1, temp.length()));
                 break;
+            case "ndisponiveis":
+                System.out.println("Comando ndisponiveis!");
+                controlador.gui.mostraPecasDisponiveis(Integer.parseInt(temp.substring(temp.indexOf(" ") + 1, temp.length())));
+                break;
             case "msg": // OK
                 System.out.println("Comando mensagem!");
                 controlador.gui.adicionaMsg(temp.substring(temp.indexOf(" ") + 1, temp.length()));
