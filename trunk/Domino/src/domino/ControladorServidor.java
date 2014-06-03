@@ -1,7 +1,10 @@
 package domino;
 
 import gui.jFrame;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rede.ServidorTCP;
 import rede.ServidorUDP;
 
@@ -73,9 +76,17 @@ public class ControladorServidor {
     public void atualizaNovoJogador(Jogador jogador) {
         atualizaTabelaJogadores(jogo.jogadores);
         mostraJogoAtual(jogo.pecasJogo, jogo.pecasDisponiveis, jogo.jogadores, jogo.rodada);
-
+        
+        //String ip = servidorTcp.server.getInetAddress().getHostAddress();
+        String ip="";
+        try {
+            ip = servidorTcp.server.getInetAddress().getLocalHost().getHostAddress();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(ControladorServidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
         if (jogo.jogadores.size() == 1)
-            gui.adicionaMsg("Servidor rodando! IP: "+ servidorTcp.server.getInetAddress().getHostAddress()+" Porta: "+12345);        
+            gui.adicionaMsg("Servidor rodando! IP: "+ ip+" Porta: "+12345);        
         
         gui.adicionaMsg("Jogador '" + jogador.nome + "' conectado!");
 
