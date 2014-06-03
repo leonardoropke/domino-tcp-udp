@@ -691,6 +691,8 @@ public class jFrame extends javax.swing.JFrame {
                     if (controladorServidor.jogo.jogadaValida(jogador, pecaSelecionada, lado)) {
                         System.out.println("Jogada valida do usuario 0 !");
                         jogador.removePeca(pecaSelecionada);
+                        
+                        controladorServidor.servidorTcp.avisaJogada(jogador, pecaSelecionada, lado);
                         controladorServidor.atualizaTela();
                         mostraPecasJogador(jogador.listaDePecas);
 
@@ -733,6 +735,7 @@ public class jFrame extends javax.swing.JFrame {
                     if (controladorCliente.jogo.jogadaValida(jogador, pecaSelecionada, lado)) {
                         String jogada = "jogar " + pecaSelecionada.toString() + " " + lado;
                         try {
+                            travaTela();
                             controladorCliente.clienteTcp.output.writeObject(jogada);
                             controladorCliente.clienteTcp.output.flush();
                             if (lado.equals("dir")) controladorCliente.jogo.pecasJogo.add(pecaSelecionada);

@@ -140,7 +140,7 @@ public class JogoCliente {
                 return true;
             }
         }
-        
+
         if (lado.equals("dir")) {
             // Tentar encaixar do lado DIREITO do jogo atual
             System.out.println("Tentando encaixar do lado direito!");
