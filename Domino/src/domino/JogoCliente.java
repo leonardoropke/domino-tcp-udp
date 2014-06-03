@@ -82,6 +82,7 @@ public class JogoCliente {
                 System.out.println("jogador: '"+jogadorstr+"'");
                 
                 controlador.gui.atualizaTabelaJogadoresCliente (jogadorstr, x, 6);
+                controlador.gui.adicionaMsg("Jogador '"+jogadorstr+"' conectado!");
                 
                 jogadorstr = "";
                 x++;
@@ -116,6 +117,8 @@ public class JogoCliente {
         
         if (lado.equals("Esquerdo")) lado = "esq";
         if (lado.equals("Direito")) lado = "dir";
+        
+        if (controlador.jogo.pecasJogo.size() == 0) return true;
 
         Peca pEsq = controlador.jogo.pecasJogo.get(0);
         Peca pDir = controlador.jogo.pecasJogo.get(controlador.jogo.pecasJogo.size() - 1);

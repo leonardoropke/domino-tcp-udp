@@ -55,7 +55,7 @@ public class ControladorServidor {
     public void novoJogo(int nJogadores) {
 
         this.njogadores = nJogadores;
-        this.njogadores = 2;
+//        this.njogadores = 2;
 
         jogo = new JogoServidor(njogadores, this);
 

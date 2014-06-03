@@ -13,7 +13,6 @@ import java.net.ServerSocket;
 public class ServidorTCP {
 
     public ServerSocket server; // socket de servidor     
-
     private ControladorServidor controlador;
 
     // configura a GUI
@@ -42,16 +41,16 @@ public class ServidorTCP {
             System.out.println("Nao consegui fechar a conexao!");
         }
     }
-    
+
     // Envia uma mensagem para o 'jogador', na caixa de mensagens do servidor
-    public void adicionaMsg (Jogador jogador, String msg) {
+    public void adicionaMsg(Jogador jogador, String msg) {
         try {
-            jogador.output.writeObject("msg "+msg);
+            jogador.output.writeObject("msg " + msg);
             jogador.output.flush();
         } catch (Exception e) {
-            System.out.println("Erro ao mandar mensagem para o jogador! ("+msg+")");
+            System.out.println("Erro ao mandar mensagem para o jogador! (" + msg + ")");
         }
-        
+
     }
 
     public void adicionaJogadores(final int njogadores) {
@@ -67,11 +66,14 @@ public class ServidorTCP {
         controlador.atualizaNovoJogador(jogador);
 
         /*
-        if (controlador.jogo.jogadores.size() == 0)
-            controlador.adicionaMsg("Servidor rodando! IP: "+ controlador.servidorTcp.server.getInetAddress().getHostAddress()+" Porta: "+12345);        
-*/
-        
+         * if (controlador.jogo.jogadores.size() == 0)
+         * controlador.adicionaMsg("Servidor rodando! IP: "+
+         * controlador.servidorTcp.server.getInetAddress().getHostAddress()+"
+         * Porta: "+12345);
+         */
+
         new Thread() {
+
             @Override
             public void run() {
                 try {
@@ -109,21 +111,22 @@ public class ServidorTCP {
 
     public void enviaNomesJogadores() {
         try {
-            String nomes="";
+            String nomes = "";
             Jogador jogador;
-            for (int i=0; i<=controlador.jogo.jogadores.size()-1; i++)
-                nomes += controlador.jogo.jogadores.get(i).nome+" ";
-            
-            for (int i=1; i<=controlador.jogo.jogadores.size()-1; i++) {
+            for (int i = 0; i <= controlador.jogo.jogadores.size() - 1; i++) {
+                nomes += controlador.jogo.jogadores.get(i).nome + " ";
+            }
+
+            for (int i = 1; i <= controlador.jogo.jogadores.size() - 1; i++) {
                 jogador = controlador.jogo.jogadores.get(i);
-                jogador.output.writeObject("jogadores "+jogador.numJogador+" "+nomes);
+                jogador.output.writeObject("jogadores " + jogador.numJogador + " " + nomes);
                 jogador.output.flush();
             }
         } catch (Exception e) {
             System.out.println("Erro ao mandar fim de rodada o jogador!");
         }
     }
-    
+
     // Quando mandar este comando, o cliente deve destravar a tela, permitir a jogada e
     // travar a tela novamente
     public void controlaJogadas(int jogadorDavez) {
@@ -155,17 +158,16 @@ public class ServidorTCP {
         String lado;
 
         try {
-             // Mandamos o cliente jogar. Agora precisamos esperar 2 tipos de resposta:
+            // Mandamos o cliente jogar. Agora precisamos esperar 2 tipos de resposta:
             // 1- O cliente quer comprar pecas: enviar peca desejada para ele (e comunicar os outros jogadores)
             // 2- O cliente fez uma jogada: receber pecas (e comunicar os outros jogadores)
 
             recebido = (String) jogador.input.readObject();
-            
-            if (recebido.contains ("pular")) {
+
+            if (recebido.contains("pular")) {
                 controlador.atualizaTela();
-                controlador.jogo.proximoJogador(new Peca (0,0));
-            }
-            else if (recebido.contains("comprar")) { // Tratar opcao de compra de pecas
+                controlador.jogo.proximoJogador(new Peca(0, 0));
+            } else if (recebido.contains("comprar")) { // Tratar opcao de compra de pecas
                 System.out.println("Jogador '" + jogador.nome + "' quer comprar pecas!");
                 comando = recebido.substring(0, recebido.indexOf(" "));
                 String indexPecaString = recebido.substring(recebido.indexOf(" "));
@@ -176,7 +178,7 @@ public class ServidorTCP {
                 System.out.println("Jogador '" + jogador.nome + "' quer jogar!");
                 // O comando deve vir no formato: 'jogar [x:x] esq'
                 comando = recebido.substring(0, recebido.indexOf(" "));
-                 //System.out.println("Comando: '"+comando+"'");
+                //System.out.println("Comando: '"+comando+"'");
 
                 pecaString = recebido.substring(recebido.indexOf("["), recebido.indexOf("]") + 1);
                 //System.out.println("pecaString: '"+pecaString+"'");
@@ -184,7 +186,7 @@ public class ServidorTCP {
                 esq = Integer.parseInt(pecaString.substring(1, 2));
                 dir = Integer.parseInt(pecaString.substring(3, 4));
                 peca = new Peca(esq, dir);
-                 //System.out.println("Peca: '"+peca.toString()+"'");
+                //System.out.println("Peca: '"+peca.toString()+"'");
 
                 lado = recebido.substring(recebido.indexOf("]") + 2, recebido.length());
 
@@ -195,6 +197,7 @@ public class ServidorTCP {
 
                     System.out.println("Jogada valida!");
                     controlador.atualizaTela();
+                    controlador.servidorTcp.avisaJogada(peca, lado);
                     controlador.jogo.proximoJogador(peca);
                     return;
                 } else { // Jogada nao eh valida! Avisar o jogador e esperar outra jogada!
@@ -212,7 +215,7 @@ public class ServidorTCP {
 
     public void avisaFimRodada(Jogador jogador, int pontosA, int pontosB) {
         try {
-            jogador.output.writeObject("fimrodada "+pontosA+" "+pontosB);
+            jogador.output.writeObject("fimrodada " + pontosA + " " + pontosB);
             jogador.output.flush();
         } catch (Exception e) {
             System.out.println("Erro ao mandar fim de rodada o jogador!");
@@ -221,12 +224,28 @@ public class ServidorTCP {
 
     public void avisaFimJogo(Jogador jogador, int pontosA, int pontosB) {
         try {
-            jogador.output.writeObject("fimjogo "+pontosA+" "+pontosB);
+            jogador.output.writeObject("fimjogo " + pontosA + " " + pontosB);
             jogador.output.flush();
         } catch (Exception e) {
             System.out.println("Erro ao mandar fim de jogo para o jogador!");
         }
-        
+
     }
 
+    private void avisaJogada(Peca peca, String lado) {
+        for (int i = 0; i < controlador.jogo.jogadores.size() - 1; i++) {
+            Jogador jogador = controlador.jogo.jogadores.get(i);
+            if (i == 0) {
+                if (lado.equals("esq")) controlador.jogo.pecasJogo.add(0, peca);
+                if (lado.equals("dir")) controlador.jogo.pecasJogo.add(peca);
+                controlador.gui.mostraJogo(controlador.jogo.pecasJogo);
+            }else 
+            try {
+                jogador.output.writeObject("jogada " + peca + " " + lado);
+                jogador.output.flush();
+            } catch (Exception e) {
+                System.out.println("Erro ao mandar fim de jogo para o jogador!");
+            }
+        }
+    }
 }
