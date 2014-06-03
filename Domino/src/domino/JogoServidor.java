@@ -8,7 +8,7 @@ public class JogoServidor {
 
     ControladorServidor controlador;
     public ArrayList<Peca> pecasJogo = new ArrayList<>();
-    ArrayList<Peca> pecasDisponiveis = new ArrayList<>();
+    public ArrayList<Peca> pecasDisponiveis = new ArrayList<>();
     public ArrayList<Jogador> jogadores = new ArrayList<>();
     int jogadorDavez;
 

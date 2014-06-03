@@ -46,16 +46,14 @@ public class jFrame extends javax.swing.JFrame {
         return nome;
     }
 
-    public void mostraPecasDisponiveis(ArrayList<Peca> pecas) {
+    public void mostraPecasDisponiveis(int x) {
         String pecasFinais = "";
-        for (int i = 0; i < pecas.size(); i++) {
-            pecasFinais += "Peca " + (i + 1)
-                    + //": "+pecas.get(i).toString()
-                    " || ";
+        for (int i = 0; i < x; i++) {
+            pecasFinais += "[x:x] ";
         }
         jTextField3.setText(pecasFinais);
     }
-
+    
     public void mostraJogo(ArrayList<Peca> pecas) {
         String pecasFinais = "";
         for (int i = 0; i < pecas.size(); i++) {
@@ -823,4 +821,6 @@ public class jFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
+
+
 }
