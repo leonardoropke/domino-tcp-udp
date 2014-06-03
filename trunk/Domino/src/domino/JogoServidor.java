@@ -107,7 +107,7 @@ public class JogoServidor {
 
         //****************************************************************************************************
         // REMOVER ISSO!!! SO USEI PRA TESTAR!!!
-        jogadorDavez = 0;
+//        jogadorDavez = 0;
         //****************************************************************************************************
 
         System.out.println("A peca inicial foi encontrada com o jogador " + jogadorDavez);
@@ -277,6 +277,8 @@ public class JogoServidor {
         
         if (lado.equals("Esquerdo")) lado = "esq";
         if (lado.equals("Direito")) lado = "dir";
+        
+        if (controlador.jogo.pecasJogo.size() == 0) return true;
 
         Peca pEsq = controlador.jogo.pecasJogo.get(0);
         Peca pDir = controlador.jogo.pecasJogo.get(controlador.jogo.pecasJogo.size() - 1);
