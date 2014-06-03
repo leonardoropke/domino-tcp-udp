@@ -2,6 +2,7 @@ package domino;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import rede.ServidorTCP;
 
 public class JogoServidor {
 
@@ -19,7 +20,7 @@ public class JogoServidor {
         this.maxJogadores = maxJogadores;
         this.controlador = cont;
     }
-
+    
     public void adicionaJogador(Jogador jogador) {
         jogadores.add(jogador);
         controlador.atualizaTabelaJogadores(jogadores);
@@ -44,7 +45,7 @@ public class JogoServidor {
             System.out.println("Nao consegui remover a peca: "+peca.toString()+"!!!");
     }
   
-    // Metodo pra descobrir se o jogador tem uma determinada peca
+    // Metodo pra procurar uma peca em 'pecasJogo'
     // Se encontrar, retornar a posicao da peca
     // Se NAO encontrar, retornar -1
     public int procura (Peca peca) {
@@ -115,7 +116,7 @@ public class JogoServidor {
         // O jogador da vez eh o usuario que roda o programa, então nao precisa
         // de comunicacao em rede!
         if (jogadorDavez == 0) {
-            controlador.mensagemJogadores("Sua vez de jogar!");
+            controlador.alertaUsuario("Sua vez de jogar!");
             controlador.gui.destravaTela();
         } else {
             controlador.servidorTcp.controlaJogadas(jogadorDavez);
@@ -124,19 +125,21 @@ public class JogoServidor {
     }
 
     public void proximoJogador(Peca pecaJogada) {
+
         Jogador jogador = controlador.jogo.jogadores.get(jogadorDavez);
-        if (jogador.listaDePecas.size() == 0) {
-            // jogadorDavez ganhou!
+        
+        if (jogador.listaDePecas.size() == 0) { // Acabou a rodada! jogadorDavez ganhou!
+            
             // 1- Calcular pontuacao!
             // 2- Incrementar pontuacao dele e do outro membro da dupla!
             // 3- Finalizar jogo e avisar todos os outros jogadores!
             int pontos;
             
             removePecaJogo(pecaJogada);
-            
+
+            // Calcular quantos pontos serao ganhos pela dupla vencedora
             Peca pEsq = controlador.jogo.pecasJogo.get(0);
             Peca pDir = controlador.jogo.pecasJogo.get(controlador.jogo.pecasJogo.size() - 1);
-
             if (pecaJogada.ladoE == pecaJogada.ladoD) { // Eh carroca!
                 if ((pecaJogada.ladoD == pEsq.ladoE) && (pecaJogada.ladoE == pDir.ladoD))
                     pontos = 4;
@@ -151,30 +154,49 @@ public class JogoServidor {
             }
 
             // Incrementando pontos da dupla!
-            if (jogadorDavez % 2 == 0) { // Eh par!
+            if (jogadorDavez % 2 == 0) { // Eh par! Dupla A!
                 jogador = controlador.jogo.jogadores.get(0);
                 jogador.pontos = jogador.pontos + pontos;
                 jogador = controlador.jogo.jogadores.get(2);
                 jogador.pontos = jogador.pontos + pontos;
-//******************************************************************************************
-                // Aqui tem que avisar os jogadores do incremento de pontos!!!
             }
-            else { // Eh IMPAR!
+            else { // Eh IMPAR! Dupla B!
                 jogador = controlador.jogo.jogadores.get(1);
                 jogador.pontos = jogador.pontos + pontos;
                 jogador = controlador.jogo.jogadores.get(3);
                 jogador.pontos = jogador.pontos + pontos;                
             }
             
-            // Finalizar jogo e avisar 
+            int pontosA = controlador.jogo.jogadores.get(0).pontos + controlador.jogo.jogadores.get(2).pontos;
+            int pontosB = controlador.jogo.jogadores.get(1).pontos + controlador.jogo.jogadores.get(3).pontos;
+            
+            // Finalizar jogo e avisar
+            for (int i=0; i<=maxJogadores-1; i++) {
+                if (i == 0) {
+                    fimdeRodada(pontosA, pontosB);
+                   
+                }
+                else {
+                    jogador = controlador.jogo.jogadores.get(i);
+                    controlador.servidorTcp.avisaFimRodada (jogador, pontosA, pontosB);
+                }
+            }
+
+            rodada++;
+            if ((rodada == 14) || (pontosA >= 7) || (pontosB >= 7)) {
+                fimdeJogo (pontosA, pontosB);
+            }
+            else
+                controlador.comecaRodada(); // Comeca nova rodada            
             
         }
         else {
         
             // Proximo jogador!
             jogadorDavez = (jogadorDavez + 1) % maxJogadores;
+            controlador.adicionaMsg("Esta na vez do jogador "+ jogadores.get(jogadorDavez).nome+"!");
             if (jogadorDavez == 0) {
-                controlador.mensagemJogadores("Sua vez de jogar!");
+                controlador.alertaUsuario("Sua vez de jogar!");
                 controlador.gui.destravaTela();
             } else
                 controlador.servidorTcp.controlaJogadas(jogadorDavez);
@@ -325,6 +347,30 @@ public class JogoServidor {
 
         }
 
+    }
+
+    // Fim de rodada! Avisar apenas o jogador 0 aqui!
+    private void fimdeRodada(int pontosA, int pontosB) {
+        controlador.gui.alertaUsuario("Fim de rodada!");
+        controlador.gui.atualizaPlacar(pontosA, pontosB);
+        
+    }
+
+    // Acabou o jogo! Avisar todos os jogadores!
+    private void fimdeJogo(int pontosA, int pontosB) {
+        for (int i=0; i<=maxJogadores-1; i++) {
+            if (i == 0) {
+                controlador.gui.atualizaPlacar(pontosA, pontosB);
+
+                if (pontosA > pontosB)
+                    controlador.gui.alertaUsuario("Fim de jogo! Dupla A ganhou!");
+                else
+                    controlador.gui.alertaUsuario("Fim de jogo! Dupla B ganhou!");
+            }
+            else
+                controlador.servidorTcp.avisaFimJogo(controlador.jogo.jogadores.get(i), pontosA, pontosB);
+        }
+        
     }
 
 }

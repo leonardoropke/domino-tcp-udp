@@ -18,19 +18,21 @@ public class jFrame extends javax.swing.JFrame {
     public boolean telaTravada = true;
     public boolean ehServidor = false;
 
-    public void mensagemUsuario(String msg) {
+    public void alertaUsuario(String msg) {
         JOptionPane.showMessageDialog(null, msg);
     }
 
     public void travaTela() {
         jButton1.setEnabled(false);
         jButton4.setEnabled(false);
+        jButton5.setEnabled(false);
         telaTravada = true;
     }
 
     public void destravaTela() {
         jButton1.setEnabled(true);
         jButton4.setEnabled(true);
+        jButton5.setEnabled(true);
         telaTravada = false;
     }
 
@@ -65,7 +67,7 @@ public class jFrame extends javax.swing.JFrame {
     public void mostraPecasJogador(ArrayList<Peca> pecas) {
         String pecasFinais = "";
         for (int i = 0; i < pecas.size(); i++) {
-            pecasFinais += pecas.get(i).toString()+" ";
+            pecasFinais += pecas.get(i).toString() + " ";
         }
         jTextField9.setText(pecasFinais);
     }
@@ -90,6 +92,23 @@ public class jFrame extends javax.swing.JFrame {
             jTable1.getModel().setValueAt(numPecas, i, 1);
             System.out.println("Jogador: '" + nomeJogador + "' | nPecas: " + numPecas);
         }
+    }
+
+    public void atualizaPlacar(int pontosA, int pontosB) {
+        System.out.println("ATUALIZANDO placar!");
+
+        String pa, pb;
+
+        pa = Integer.toString(pontosA);
+        pb = Integer.toString(pontosB);
+
+        jTable2.getModel().setValueAt("Dupla A", 0, 0);
+        jTable2.getModel().setValueAt(pa, 0, 1);
+
+        jTable2.getModel().setValueAt("Dupla B", 1, 0);
+        jTable2.getModel().setValueAt(pb, 1, 1);
+
+        System.out.println("Dupla A: " + pa + " | Dupla B: " + pb);
     }
 
     public jFrame() {
@@ -137,6 +156,7 @@ public class jFrame extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jTextField5 = new javax.swing.JTextField();
@@ -201,8 +221,8 @@ public class jFrame extends javax.swing.JFrame {
 
         jLabel9.setText("Mensagens do Servidor");
 
-        displayServidor.setEditable(false);
         displayServidor.setColumns(20);
+        displayServidor.setEditable(false);
         displayServidor.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         displayServidor.setRows(5);
         jScrollPane1.setViewportView(displayServidor);
@@ -241,17 +261,25 @@ public class jFrame extends javax.swing.JFrame {
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null}
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Dupla", "Ultima Rod", "Total"
+                "Dupla", "Pontos"
             }
         ));
         jTable2.setToolTipText("");
         jScrollPane3.setViewportView(jTable2);
 
         jLabel2.setText("Placar");
+
+        jButton5.setText("Passar a vez");
+        jButton5.setEnabled(false);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -278,7 +306,9 @@ public class jFrame extends javax.swing.JFrame {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGap(50, 50, 50)
-                                            .addComponent(jButton1))
+                                            .addComponent(jButton1)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(jButton5))
                                         .addGroup(jPanel1Layout.createSequentialGroup()
                                             .addComponent(jLabel10)
                                             .addGap(18, 18, 18)
@@ -288,10 +318,10 @@ public class jFrame extends javax.swing.JFrame {
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel9)
                                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 103, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel12)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -337,7 +367,8 @@ public class jFrame extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1)))
+                            .addComponent(jButton1)
+                            .addComponent(jButton5)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -468,7 +499,7 @@ public class jFrame extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(51, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -506,11 +537,10 @@ public class jFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 739, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -542,7 +572,7 @@ public class jFrame extends javax.swing.JFrame {
         if (jTextField2.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Digite o seu nome!");
         } else {
-            setSize(780, 700); // [732, 621]
+            setSize(800, 700); // [732, 621]
             //jPanel2.setVisible(false);
             jPanel1.setVisible(true);
 
@@ -641,7 +671,7 @@ public class jFrame extends javax.swing.JFrame {
 
                     Jogador jogador = controladorServidor.jogo.jogadores.get(0);
                     final Peca pecaSelecionada = jogador.listaDePecas.get(peca - 1);
-                    
+
                     if (controladorServidor.jogo.jogadaValida(jogador, pecaSelecionada, lado)) {
                         System.out.println("Jogada valida do usuario 0 !");
                         jogador.removePeca(pecaSelecionada);
@@ -674,6 +704,23 @@ public class jFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // Travar a tela e chamar o proximo jogador
+        travaTela();
+        new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    controladorServidor.jogo.proximoJogador(new Peca(0,0));
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        }.start();
+
+    }//GEN-LAST:event_jButton5ActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -684,6 +731,7 @@ public class jFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
