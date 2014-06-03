@@ -178,6 +178,7 @@ public class jFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Domino Mania");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Área de Jogo"));
 

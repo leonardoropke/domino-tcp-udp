@@ -96,14 +96,14 @@ public class ClienteTCP {
         switch (comando) {
             case "jogadores": // OK
                 System.out.println("Comando jogadores!!");
-                System.out.println("Numero de jogador: " + temp.substring(10, 11));
+                System.out.println("Numero de jogador: " + Integer.parseInt(temp.substring(10, 11)));
                 controlador.jogo.recebeJogadores(Integer.parseInt(temp.substring(10, 11)), temp.substring(11, temp.length()));
                 break;
             case "receber": // OK
                 System.out.println("Comando receber!");
                 controlador.jogo.recebePecas(temp.substring(temp.indexOf(" ") + 1, temp.length()));
                 break;
-            case "ndisponiveis":
+            case "ndisponiveis": // OK
                 System.out.println("Comando ndisponiveis!");
                 controlador.gui.mostraPecasDisponiveis(Integer.parseInt(temp.substring(temp.indexOf(" ") + 1, temp.length())));
                 break;

@@ -83,6 +83,8 @@ public class JogoCliente {
                 
                 controlador.gui.atualizaTabelaJogadoresCliente (jogadorstr, x, 6);
                 controlador.gui.adicionaMsg("Jogador '"+jogadorstr+"' conectado!");
+                if (x == njogador)
+                    controlador.gui.setTitle("Domino Mania - "+jogadorstr);
                 
                 jogadorstr = "";
                 x++;
