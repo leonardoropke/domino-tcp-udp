@@ -14,6 +14,7 @@ public class JogoServidor {
 
     public int maxJogadores;
     int rodada = 1;
+    int conta=0;
     boolean jogando = false;
 
     public JogoServidor(int maxJogadores, ControladorServidor cont) {
@@ -65,7 +66,7 @@ public class JogoServidor {
         Peca peca;
         int x = 0; // Controla o array de pecas
         for (int i = 0; i < jogadores.size(); i++) {
-            for (int j = 0; j < 6; j++) { // 6 Pecas para cada jogador...
+            for (int j = 0; j < (pecasJogo.size()-4)/jogadores.size(); j++) { // 6 Pecas para cada jogador...
                 peca = pecasJogo.get(x); // Pegar uma peca da lista de pecas...
                 jogadores.get(i).recebePeca(peca); // Dar a peca para o jogador
                 x++;
@@ -191,6 +192,7 @@ public class JogoServidor {
             
         }
         else {
+            conta++;
         
             // Proximo jogador!
             jogadorDavez = (jogadorDavez + 1) % maxJogadores;
@@ -293,12 +295,12 @@ public class JogoServidor {
             if (peca.ladoE == pEsq.ladoE) {
                 // Pode encaixar, mas tem que inverter a peca!
                 peca.inverter();
-                avisarOutrosJogadores(jogador, peca, lado);
+//                avisarOutrosJogadores(jogador, peca, lado);
                 return true;
             }
             else if (peca.ladoD == pEsq.ladoE) {
                 // Pode encaixar perfeitamente!
-                avisarOutrosJogadores(jogador, peca, lado);
+//                avisarOutrosJogadores(jogador, peca, lado);
                 return true;
             }
         }
@@ -308,12 +310,12 @@ public class JogoServidor {
             System.out.println("Tentando encaixar do lado direito!");
             if (peca.ladoE == pDir.ladoD) {
                 // Pode encaixar perfeitamente!
-                avisarOutrosJogadores(jogador, peca, lado);
+//                avisarOutrosJogadores(jogador, peca, lado);
                 return true;
             } else if (peca.ladoD == pDir.ladoD) {
                 // Pode encaixar, mas tem que inverter a peca!
                 peca.inverter();
-                avisarOutrosJogadores(jogador, peca, lado);
+//                avisarOutrosJogadores(jogador, peca, lado);
                 return true;
             }
         }

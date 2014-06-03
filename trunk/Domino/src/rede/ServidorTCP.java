@@ -196,8 +196,10 @@ public class ServidorTCP {
                 if (controlador.jogo.jogadaValida(jogador, peca, lado)) {
 
                     System.out.println("Jogada valida!");
-                    controlador.atualizaTela();
-                    controlador.servidorTcp.avisaJogada(peca, lado);
+
+                    // AQUI TEM QUE ATUALIZAR OS OUTROS JOGADORES DESSA JOGADA!
+                    avisaJogada(jogador, peca, lado);
+
                     controlador.jogo.proximoJogador(peca);
                     return;
                 } else { // Jogada nao eh valida! Avisar o jogador e esperar outra jogada!
@@ -232,19 +234,29 @@ public class ServidorTCP {
 
     }
 
-    private void avisaJogada(Peca peca, String lado) {
-        for (int i = 0; i < controlador.jogo.jogadores.size() - 1; i++) {
-            Jogador jogador = controlador.jogo.jogadores.get(i);
+    public void avisaJogada(Jogador jogador, Peca peca, String lado) {
+        for (int i = 0; i <= controlador.jogo.jogadores.size() - 1; i++) {
             if (i == 0) {
-                if (lado.equals("esq")) controlador.jogo.pecasJogo.add(0, peca);
-                if (lado.equals("dir")) controlador.jogo.pecasJogo.add(peca);
-                controlador.gui.mostraJogo(controlador.jogo.pecasJogo);
-            }else 
-            try {
-                jogador.output.writeObject("jogada " + peca + " " + lado);
-                jogador.output.flush();
-            } catch (Exception e) {
-                System.out.println("Erro ao mandar fim de jogo para o jogador!");
+                if (lado.equals("esq")) {
+                    controlador.jogo.pecasJogo.add(0, peca);
+                }
+                if (lado.equals("dir")) {
+                    controlador.jogo.pecasJogo.add(peca);
+                }
+                controlador.atualizaTela();
+            } else {
+                try {
+                    if (jogador.numJogador != i) {
+                        System.out.println("Peca: "+ peca.toString());
+                        String str = "jogada " + peca.toString() + " " + lado;
+                        System.out.println("str: '"+str+"'");
+                        controlador.jogo.jogadores.get(i).output.writeObject(str);
+                        controlador.jogo.jogadores.get(i).output.flush();
+                    }
+                } catch (Exception e) {
+                    System.out.println("Erro ao mandar jogada para o jogador!");
+                }
+
             }
         }
     }

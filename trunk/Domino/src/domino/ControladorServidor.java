@@ -107,8 +107,9 @@ public class ControladorServidor {
         atualizaTabelaJogadores(jogo.jogadores); // Atualiza interface grafica...
         mostraJogoAtual(jogo.pecasJogo, jogo.pecasDisponiveis, jogo.jogadores, jogo.rodada);
 
-        jogo.iniciar(); // Comecar!
         adicionaMsg("Jogo iniciado!");
+        jogo.iniciar(); // Comecar!
+
     }
     
 }
