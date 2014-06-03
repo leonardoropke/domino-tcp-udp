@@ -35,6 +35,27 @@ public class JogoServidor {
         }
     }
 
+    public void removePecaJogo (Peca peca) {
+        // Temos que procurar a posicao no array onde esta a peca selecionada...
+        int local = procura (peca);
+        if (local != -1)
+            pecasJogo.remove(local);
+        else
+            System.out.println("Nao consegui remover a peca: "+peca.toString()+"!!!");
+    }
+  
+    // Metodo pra descobrir se o jogador tem uma determinada peca
+    // Se encontrar, retornar a posicao da peca
+    // Se NAO encontrar, retornar -1
+    public int procura (Peca peca) {
+        int i;
+        for (i=0; i<pecasJogo.size(); i++) {
+            if ((pecasJogo.get(i).ladoE == peca.ladoE) && (pecasJogo.get(i).ladoD == peca.ladoD))
+                return i;
+        }
+        return -1;
+    }
+    
     public void preparaJogo() {
         // Criando e distribuindo as pecas
         misturaPecas();
@@ -102,13 +123,61 @@ public class JogoServidor {
 
     }
 
-    public void proximoJogador() {
-        jogadorDavez = (jogadorDavez + 1) % maxJogadores;
-        if (jogadorDavez == 0) {
-            controlador.mensagemJogadores("Sua vez de jogar!");
-            controlador.gui.destravaTela();
-        } else {
-            controlador.servidorTcp.controlaJogadas(jogadorDavez);
+    public void proximoJogador(Peca pecaJogada) {
+        Jogador jogador = controlador.jogo.jogadores.get(jogadorDavez);
+        if (jogador.listaDePecas.size() == 0) {
+            // jogadorDavez ganhou!
+            // 1- Calcular pontuacao!
+            // 2- Incrementar pontuacao dele e do outro membro da dupla!
+            // 3- Finalizar jogo e avisar todos os outros jogadores!
+            int pontos;
+            
+            removePecaJogo(pecaJogada);
+            
+            Peca pEsq = controlador.jogo.pecasJogo.get(0);
+            Peca pDir = controlador.jogo.pecasJogo.get(controlador.jogo.pecasJogo.size() - 1);
+
+            if (pecaJogada.ladoE == pecaJogada.ladoD) { // Eh carroca!
+                if ((pecaJogada.ladoD == pEsq.ladoE) && (pecaJogada.ladoE == pDir.ladoD))
+                    pontos = 4;
+                else
+                    pontos = 2;
+            }
+            else { // Nao eh carroca!
+                if ((pecaJogada.ladoD == pEsq.ladoE) && (pecaJogada.ladoE == pDir.ladoD))
+                    pontos = 3;
+                else
+                    pontos = 1;
+            }
+
+            // Incrementando pontos da dupla!
+            if (jogadorDavez % 2 == 0) { // Eh par!
+                jogador = controlador.jogo.jogadores.get(0);
+                jogador.pontos = jogador.pontos + pontos;
+                jogador = controlador.jogo.jogadores.get(2);
+                jogador.pontos = jogador.pontos + pontos;
+//******************************************************************************************
+                // Aqui tem que avisar os jogadores do incremento de pontos!!!
+            }
+            else { // Eh IMPAR!
+                jogador = controlador.jogo.jogadores.get(1);
+                jogador.pontos = jogador.pontos + pontos;
+                jogador = controlador.jogo.jogadores.get(3);
+                jogador.pontos = jogador.pontos + pontos;                
+            }
+            
+            // Finalizar jogo e avisar 
+            
+        }
+        else {
+        
+            // Proximo jogador!
+            jogadorDavez = (jogadorDavez + 1) % maxJogadores;
+            if (jogadorDavez == 0) {
+                controlador.mensagemJogadores("Sua vez de jogar!");
+                controlador.gui.destravaTela();
+            } else
+                controlador.servidorTcp.controlaJogadas(jogadorDavez);
         }
     }
 

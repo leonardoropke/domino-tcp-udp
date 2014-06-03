@@ -640,7 +640,7 @@ public class jFrame extends javax.swing.JFrame {
                     System.out.println("Testar se jogada eh valida!");
 
                     Jogador jogador = controladorServidor.jogo.jogadores.get(0);
-                    Peca pecaSelecionada = jogador.listaDePecas.get(peca - 1);
+                    final Peca pecaSelecionada = jogador.listaDePecas.get(peca - 1);
                     
                     if (controladorServidor.jogo.jogadaValida(jogador, pecaSelecionada, lado)) {
                         System.out.println("Jogada valida do usuario 0 !");
@@ -655,7 +655,7 @@ public class jFrame extends javax.swing.JFrame {
                             @Override
                             public void run() {
                                 try {
-                                    controladorServidor.jogo.proximoJogador();
+                                    controladorServidor.jogo.proximoJogador(pecaSelecionada);
                                 } catch (Exception e) {
                                     System.out.println(e);
                                 }

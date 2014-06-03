@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Jogador implements Runnable {
     public String nome;
     public int numJogador; // Meu numero de jogador
+    public int pontos;
     public ArrayList<Peca> listaDePecas = new ArrayList<>();
 
     public Socket conexao;
@@ -20,6 +21,7 @@ public class Jogador implements Runnable {
 	this.nome = nm;
         this.conexao = socket;
         this.numJogador = numJogador;
+        this.pontos = 0;
 
     }
 
