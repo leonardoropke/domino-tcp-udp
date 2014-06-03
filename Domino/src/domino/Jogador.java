@@ -46,7 +46,7 @@ public class Jogador implements Runnable {
     public void recebePeca (Peca peca) {
         listaDePecas.add(peca);
     }
-    
+
     public void removePeca (Peca peca) {
         // Temos que procurar a posicao no array onde esta a peca selecionada...
         int local = procura (peca);
@@ -90,7 +90,7 @@ public class Jogador implements Runnable {
         }
         
         try {
-            output.writeObject( "receber pecas "+pecas );
+            output.writeObject( "receber "+pecas );
             output.flush(); // esvazia a saída para o cliente    
 
         } catch (Exception ex) {

@@ -291,12 +291,12 @@ public class JogoServidor {
             if (peca.ladoE == pEsq.ladoE) {
                 // Pode encaixar, mas tem que inverter a peca!
                 peca.inverter();
-                avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
+                avisarOutrosJogadores(jogador, peca, lado);
                 return true;
             }
             else if (peca.ladoD == pEsq.ladoE) {
                 // Pode encaixar perfeitamente!
-                avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
+                avisarOutrosJogadores(jogador, peca, lado);
                 return true;
             }
         }
@@ -306,12 +306,12 @@ public class JogoServidor {
             System.out.println("Tentando encaixar do lado direito!");
             if (peca.ladoE == pDir.ladoD) {
                 // Pode encaixar perfeitamente!
-                avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
+                avisarOutrosJogadores(jogador, peca, lado);
                 return true;
             } else if (peca.ladoD == pDir.ladoD) {
                 // Pode encaixar, mas tem que inverter a peca!
                 peca.inverter();
-                avisarOutrosJogadores(jogador, peca, lado); // AQUI TEMOS QUE AVISAR OS OUTROS JOGADORES DE UMA JOGADA!
+                avisarOutrosJogadores(jogador, peca, lado);
                 return true;
             }
         }
