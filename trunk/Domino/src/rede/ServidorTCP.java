@@ -98,12 +98,7 @@ public class ServidorTCP {
     // Quando mandar este comando, o cliente deve destravar a tela, permitir a jogada e
     // travar a tela novamente
     public void controlaJogadas(int jogadorDavez) {
-        String recebido;
-        String comando;
         Jogador jogador;
-        Peca peca;
-        String pecaString;
-        String lado;
 
         jogador = controlador.jogo.jogadores.get(jogadorDavez);
 
@@ -167,7 +162,7 @@ public class ServidorTCP {
 
                     System.out.println("Jogada valida!");
                     controlador.atualizaTela();
-                    controlador.jogo.proximoJogador();
+                    controlador.jogo.proximoJogador(peca);
                     return;
                 } else { // Jogada nao eh valida! Avisar o jogador e esperar outra jogada!
                     System.out.println("Jogada invalida! Tente outra vez!");
