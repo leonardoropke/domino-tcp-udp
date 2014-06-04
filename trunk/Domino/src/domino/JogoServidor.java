@@ -414,4 +414,9 @@ public class JogoServidor {
         }
 
     }
+
+    public void atualizaPecasJogador(Jogador jogador, Peca peca) {
+        controlador.jogo.jogadores.get(jogador.numJogador).removePeca(peca);
+        controlador.gui.atualizaTabelaJogadores(controlador.jogo.jogadores);
+    }
 }

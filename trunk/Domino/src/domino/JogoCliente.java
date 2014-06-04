@@ -7,9 +7,11 @@ public class JogoCliente {
     ControladorCliente controlador;
     public ArrayList<Peca> pecasJogo = new ArrayList<> ();
     int pecasDisponiveis;
-//    ArrayList<Jogador> jogadores = new ArrayList<> ();
-    String nomeJogador;
+    public ArrayList<Jogador> jogadores = new ArrayList<> ();
+    public String nomeJogador;
+    public int numJogador;
     public Jogador jogador;
+
     
     public int pecasdisponiveis = 0;
 
@@ -84,9 +86,13 @@ public class JogoCliente {
                 System.out.println("jogador: '"+jogadorstr+"'");
                 
                 controlador.gui.atualizaTabelaJogadoresCliente (jogadorstr, x, 6);
+                jogadores.add(new Jogador (jogadorstr, null, x));
+
                 controlador.gui.adicionaMsg("Jogador '"+jogadorstr+"' conectado!");
-                if (x == njogador)
+                if (x == njogador) {
                     controlador.gui.setTitle("Domino Mania - "+jogadorstr);
+                    numJogador = x;
+                }
                 
                 jogadorstr = "";
                 x++;
@@ -111,6 +117,14 @@ public class JogoCliente {
         else
             controlador.jogo.pecasJogo.add(peca);
         
+        
+    //public void atualizaTabelaJogadoresCliente(String nomeJogador, int i, int pecas) {
+        int jogadorAnterior = numJogador -1;
+        int linhaJogador = controlador.gui.pegaJogador(jogadores.get(jogadorAnterior).nome);
+        int pecasJogador = controlador.gui.pegaPecasJogador(jogadores.get(jogadorAnterior).nome);
+        pecasJogador--;
+        
+//        controlador.gui.atualizaTabelaJogadoresCliente (jogadores.get(numJogador-1).nome, linhaJogador, pecasJogador);
         controlador.gui.mostraJogo(pecasJogo);
 
         

@@ -73,6 +73,7 @@ public class ClienteTCP {
 
                 } catch (Exception ex) {
                     System.out.println("Erro ao ler comando do servidor!");
+                    System.out.println(ex);
                 }
 
             }
