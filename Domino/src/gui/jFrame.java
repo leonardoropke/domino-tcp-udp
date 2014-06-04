@@ -90,6 +90,25 @@ public class jFrame extends javax.swing.JFrame {
 
     }
 
+    public int pegaJogador(String nome) {
+        for (int i=0; i < jTable1.getModel().getRowCount(); i++) {
+            if (jTable1.getModel().getValueAt(i, 0).equals(nome)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    public int pegaPecasJogador(String nome) {
+        for (int i=0; i < jTable1.getModel().getRowCount(); i++) {
+            if (jTable1.getModel().getValueAt(i, 0).equals(nome)) {
+                return (int) jTable1.getModel().getValueAt(i, 2);
+            }
+        }
+        return -1;
+    }
+
+
     public void atualizaTabelaJogadores(ArrayList<Jogador> jogadores) {
         System.out.println("ATUALIZANDO tabela: Numero de jogadores: " + jogadores.size());
         String nomeJogador;

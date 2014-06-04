@@ -228,9 +228,12 @@ public class ServidorTCP {
                 if (controlador.jogo.jogadaValida(jogador, peca, lado)) {
 
                     System.out.println("Jogada valida!");
-
+                    
                     // AQUI TEM QUE ATUALIZAR OS OUTROS JOGADORES DESSA JOGADA!
                     avisaJogada(jogador, peca, lado);
+
+                    // Atualizar tabela de pecas
+                    controlador.jogo.atualizaPecasJogador(jogador, peca);
 
                     controlador.jogo.proximoJogador(peca);
                     return;
