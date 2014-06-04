@@ -31,6 +31,8 @@ public class ControladorCliente {
 
         clienteTcp = new ClienteTCP(this);
         clienteTcp.conecta(ip, porta, nomeJogador);
+        gui.adicionaMsg("Conectado ao servidor "+clienteTcp.ip+" !");
+        gui.adicionaMsg("Esperando inicio de jogo...");
         clienteTcp.recebeComandos();
         
     }
