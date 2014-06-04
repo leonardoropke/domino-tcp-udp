@@ -26,13 +26,19 @@ public class jFrame extends javax.swing.JFrame {
         jButton1.setEnabled(false);
         jButton4.setEnabled(false);
         jButton5.setEnabled(false);
+        
         telaTravada = true;
     }
 
     public void destravaTela() {
         jButton1.setEnabled(true);
-        jButton4.setEnabled(true);
         jButton5.setEnabled(true);
+        
+        if (jTextField3.getText().isEmpty())
+            jButton4.setEnabled(false);
+        else
+            jButton4.setEnabled(true);
+        
         telaTravada = false;
     }
 
@@ -772,7 +778,11 @@ public class jFrame extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
-                    controladorServidor.jogo.proximoJogador(new Peca(0, 0));
+                    if (ehServidor)
+                        controladorServidor.jogo.proximoJogador(new Peca(0, 0));
+                    else
+                        controladorCliente.clienteTcp.pularJogador();
+
                 } catch (Exception e) {
                     System.out.println(e);
                 }

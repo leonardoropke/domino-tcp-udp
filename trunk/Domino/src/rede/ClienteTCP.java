@@ -164,4 +164,15 @@ public class ClienteTCP {
         } catch (IOException ioException) {
         }
     }
+
+    public void pularJogador() {
+        try {
+            output.writeObject("pular");
+            output.flush();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao pular jogador!");
+        }
+        
+    }
 }

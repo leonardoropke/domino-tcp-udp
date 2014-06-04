@@ -45,11 +45,11 @@ public class JogoServidor {
             if (i == 0) {
                 if (i == jogadorComprou.numJogador) { // Quem comprou foi o jogador 0
                     jogador.listaDePecas.add(peca);
-                    
-                    controlador.gui.alertaUsuario("Voce comprou a peca " + peca.toString() + " !");
 
                     // Atualizando a interface
                     controlador.gui.mostraPecasJogador(jogador.listaDePecas);
+                    
+                    controlador.gui.alertaUsuario("Voce comprou a peca " + peca.toString() + " !");
                     controlador.gui.travaTela();
                 }
             } else {
