@@ -10,6 +10,8 @@ public class JogoCliente {
 //    ArrayList<Jogador> jogadores = new ArrayList<> ();
     String nomeJogador;
     public Jogador jogador;
+    
+    public int pecasdisponiveis = 0;
 
     int rodada = 1;
     boolean jogando = false;
@@ -157,6 +159,24 @@ public class JogoCliente {
         }
 
         return aceitou;
+    }
+
+    public void recebePecaComprada(String pecastr) {
+        System.out.println("Peca recebidas: '"+pecastr+"'");
+        Peca peca;
+        int esq, dir;
+        
+        esq = Integer.parseInt(pecastr.substring(1, 2));
+        dir = Integer.parseInt(pecastr.substring(3, 4));
+        
+        peca = new Peca (esq, dir);
+        
+        jogador.listaDePecas.add(peca);
+        controlador.gui.mostraPecasJogador(jogador.listaDePecas);
+        
+        controlador.gui.alertaUsuario("Voce comprou a peca "+peca.toString()+" !");
+        controlador.gui.travaTela();
+
     }
 
     

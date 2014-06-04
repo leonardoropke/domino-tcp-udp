@@ -184,6 +184,11 @@ public class jFrame extends javax.swing.JFrame {
 
         jButton4.setText("Pegar!");
         jButton4.setEnabled(false);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jTextField10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -775,6 +780,44 @@ public class jFrame extends javax.swing.JFrame {
         }.start();
 
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        System.out.println("Comprando peca!");
+        
+        if (ehServidor) {
+            System.out.println("Eh servidor!");
+            if (jTextField10.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Digite um numero entre 1 e "+controladorServidor.jogo.pecasDisponiveis.size()+" !");
+            }
+            else {
+                int op = Integer.parseInt(jTextField10.getText());
+                if ((op >= 1) && (op <= controladorServidor.jogo.pecasDisponiveis.size())) { // Peca existente!
+                    System.out.println("Pedindo a mim mesmo a peca "+ op);
+                    controladorServidor.jogo.compraPeca(controladorServidor.jogo.jogadores.get(0), op-1);
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Digite um numero entre 1 e "+controladorServidor.jogo.pecasDisponiveis.size()+" !");
+
+            }
+        }
+        else {// Rodando como cliente
+            System.out.println("Eh cliente!");
+            if (jTextField10.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Digite um numero entre 1 e "+controladorServidor.jogo.pecasDisponiveis.size()+" !");
+            }
+            else {
+                int op = Integer.parseInt(jTextField10.getText());
+                if ((op >= 1) && (op <= controladorCliente.jogo.pecasdisponiveis)) { // Peca existente!
+                    System.out.println("Pedindo ao servidor a peca "+op+" !");
+                    controladorCliente.clienteTcp.compraPeca(op-1);
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Digite um numero entre 1 e "+controladorCliente.jogo.pecasdisponiveis+" !");
+
+            }
+            
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
     /**
      * @param args the command line arguments
      */

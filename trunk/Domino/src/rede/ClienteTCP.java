@@ -27,6 +27,7 @@ public class ClienteTCP {
     private Socket client;
     private ControladorCliente controlador;
     boolean podeler = false;
+    public String ip;
 
     // inicializa chatServer e configura a GUI
     public ClienteTCP(ControladorCliente aThis) {
@@ -35,6 +36,7 @@ public class ClienteTCP {
     }
 
     public void conecta(final String ip, final int porta, final String nomeJogador) {
+        this.ip = ip;
 
         try {
             client = new Socket(InetAddress.getByName(ip), porta);
@@ -105,7 +107,12 @@ public class ClienteTCP {
                 break;
             case "ndisponiveis": // OK
                 System.out.println("Comando ndisponiveis!");
-                controlador.gui.mostraPecasDisponiveis(Integer.parseInt(temp.substring(temp.indexOf(" ") + 1, temp.length())));
+                controlador.jogo.pecasdisponiveis = Integer.parseInt(temp.substring(temp.indexOf(" ") + 1, temp.length()));
+                controlador.gui.mostraPecasDisponiveis(controlador.jogo.pecasdisponiveis);
+                break;
+            case "pega": // pega [4:2]
+                System.out.println("Comando pega!");
+                controlador.jogo.recebePecaComprada (temp.substring(temp.indexOf(" ")+1));
                 break;
             case "msg": // OK
                 System.out.println("Comando mensagem!");
@@ -133,6 +140,18 @@ public class ClienteTCP {
 
 
     }
+    
+    // Envia uma peca comprada para um jogador
+    public void compraPeca (int index) {
+        try {
+            output.writeObject("comprar " + index);
+            output.flush();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao pedir pra comprar peca do servidor!");
+        }
+    }
+
 
     // fecha os fluxos e o socket
     private void closeConnection() {

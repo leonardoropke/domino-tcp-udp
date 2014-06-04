@@ -100,15 +100,31 @@ public class ServidorTCP {
         }.start();
 
     }
-    
-    public void enviaPecasDisponiveisJogadores() {
+
+    // Envia uma peca comprada para um jogador
+    public void enviaPecaComprada (Jogador jogador, Peca peca) {
+        try {
+            System.out.println("Mandando peca "+peca.toString()+" para o jogador "+jogador.nome+" !");
+            jogador.output.writeObject("pega " + peca.toString());
+            jogador.output.flush();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao mandar peca comprada para o jogador!");
+        }
+    }
+
+    // Avisar para os outros jogadores a quantidade de pecas disponiveis
+    // (exceto para o jogador numjogador
+    public void enviaPecasDisponiveisJogadores(int numjogador) {
         try {
             Jogador jogador;
 
             for (int i = 1; i <= controlador.jogo.jogadores.size() - 1; i++) {
                 jogador = controlador.jogo.jogadores.get(i);
-                jogador.output.writeObject("ndisponiveis " + controlador.jogo.pecasDisponiveis.size());
-                jogador.output.flush();
+                if (jogador.numJogador != numjogador) {
+                    jogador.output.writeObject("ndisponiveis " + controlador.jogo.pecasDisponiveis.size());
+                    jogador.output.flush();
+                }
             }
         } catch (Exception e) {
             System.out.println("Erro ao mandar o numero de pecas disponiveis para o jogador!");
@@ -119,7 +135,7 @@ public class ServidorTCP {
         Jogador jogador;
         for (int i = 0; i < controlador.jogo.jogadores.size(); i++) {
             jogador = controlador.jogo.jogadores.get(i);
-            jogador.enviaPecaCliente();
+            if (i != 0) jogador.enviaPecaCliente();
         }
     }
 
@@ -183,8 +199,10 @@ public class ServidorTCP {
                 controlador.jogo.proximoJogador(new Peca(0, 0));
             } else if (recebido.contains("comprar")) { // Tratar opcao de compra de pecas
                 System.out.println("Jogador '" + jogador.nome + "' quer comprar pecas!");
-                comando = recebido.substring(0, recebido.indexOf(" "));
-                String indexPecaString = recebido.substring(recebido.indexOf(" "));
+                //System.out.println("recebido: '"+recebido+"'");
+                
+                String indexPecaString = recebido.substring(recebido.indexOf(" ")+1);
+                
                 int indexPecaDisponivel = Integer.parseInt(indexPecaString);
                 controlador.jogo.compraPeca(jogador, indexPecaDisponivel);
 

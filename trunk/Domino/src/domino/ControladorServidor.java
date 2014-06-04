@@ -103,7 +103,7 @@ public class ControladorServidor {
         gui.mostraPecasJogador(jogo.jogadores.get(0).listaDePecas);
         servidorTcp.enviaNomesJogadores();
         servidorTcp.enviaPecasJogadores(); // Enviar as pecas para os jogadores...
-        servidorTcp.enviaPecasDisponiveisJogadores();
+        servidorTcp.enviaPecasDisponiveisJogadores(-1);
 
         atualizaTabelaJogadores(jogo.jogadores); // Atualiza interface grafica...
         mostraJogoAtual(jogo.pecasJogo, jogo.pecasDisponiveis, jogo.jogadores, jogo.rodada);
