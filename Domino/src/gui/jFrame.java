@@ -717,7 +717,7 @@ public class jFrame extends javax.swing.JFrame {
                     Jogador jogador = controladorServidor.jogo.jogadores.get(0);
                     final Peca pecaSelecionada = jogador.listaDePecas.get(peca - 1);
 
-                    if (controladorServidor.jogo.jogadaValida(jogador, pecaSelecionada, lado)) {
+                    if (controladorServidor.jogo.jogadaValida(pecaSelecionada, lado, true)) {
                         System.out.println("Jogada valida do usuario 0 !");
                         jogador.removePeca(pecaSelecionada);
                         

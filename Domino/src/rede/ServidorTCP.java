@@ -225,7 +225,7 @@ public class ServidorTCP {
                 System.out.println("Lado: '" + lado + "'");
 
                 // Aqui ja sabemos a peca e o lado. Validar a jogada!
-                if (controlador.jogo.jogadaValida(jogador, peca, lado)) {
+                if (controlador.jogo.jogadaValida(peca, lado, true)) {
 
                     System.out.println("Jogada valida!");
                     

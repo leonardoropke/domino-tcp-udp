@@ -32,7 +32,7 @@ public class JogoServidor {
     public void compraPeca(Jogador jogadorComprou, int index) {
         Jogador jogador;
 
-        System.out.println("Jogador " + jogadorComprou.nome + "("+jogadorComprou.numJogador+") quer comprar a peca " + controlador.jogo.pecasDisponiveis.get(index));
+        System.out.println("Jogador " + jogadorComprou.nome + "(" + jogadorComprou.numJogador + ") quer comprar a peca " + controlador.jogo.pecasDisponiveis.get(index));
 
         // Remover a peca da lista de pecas disponiveis
         Peca peca = pecasDisponiveis.remove(index);
@@ -40,21 +40,21 @@ public class JogoServidor {
         // Dar a peca para o jogador que pediu
         for (int i = 0; i <= controlador.jogo.jogadores.size() - 1; i++) {
             jogador = controlador.jogo.jogadores.get(i);
-            System.out.println("Jogador: "+jogador.nome+" | "+jogador.numJogador);
-            
+            System.out.println("Jogador: " + jogador.nome + " | " + jogador.numJogador);
+
             if (i == 0) {
                 if (i == jogadorComprou.numJogador) { // Quem comprou foi o jogador 0
                     jogador.listaDePecas.add(peca);
 
                     // Atualizando a interface
                     controlador.gui.mostraPecasJogador(jogador.listaDePecas);
-                    
+
                     controlador.gui.alertaUsuario("Voce comprou a peca " + peca.toString() + " !");
                     controlador.gui.travaTela();
                 }
             } else {
                 if (jogador.numJogador == jogadorComprou.numJogador) {
-                    System.out.println("O jogador que comprou foi: "+jogador.nome+"("+jogador.numJogador+")");
+                    System.out.println("O jogador que comprou foi: " + jogador.nome + "(" + jogador.numJogador + ")");
                     controlador.servidorTcp.enviaPecaComprada(jogador, peca);
                 } else {
                     controlador.servidorTcp.enviaPecasDisponiveisJogadores(jogador.numJogador);
@@ -63,7 +63,7 @@ public class JogoServidor {
         }
 
         controlador.gui.mostraPecasDisponiveis(pecasDisponiveis.size());
-        
+
         controlador.jogo.proximoJogador(peca);
 
     }
@@ -205,25 +205,30 @@ public class JogoServidor {
             int pontosA = controlador.jogo.jogadores.get(0).pontos + controlador.jogo.jogadores.get(2).pontos;
             int pontosB = controlador.jogo.jogadores.get(1).pontos + controlador.jogo.jogadores.get(3).pontos;
 
-            // Finalizar jogo e avisar
-            for (int i = 0; i <= maxJogadores - 1; i++) {
-                if (i == 0) {
-                    fimdeRodada(pontosA, pontosB);
+            acabouRodada (jogador, pontosA, pontosB);
+            
 
-                } else {
-                    jogador = controlador.jogo.jogadores.get(i);
-                    controlador.servidorTcp.avisaFimRodada(jogador, pontosA, pontosB);
-                }
-            }
-
-            rodada++;
-            if ((rodada == 14) || (pontosA >= 7) || (pontosB >= 7)) {
-                fimdeJogo(pontosA, pontosB);
-            } else {
-                controlador.comecaRodada(); // Comeca nova rodada            
-            }
         } else {
             conta++;
+
+            // Checar se deu empate
+            Jogador jogadortemp;
+            int empatou = 0;
+            for (int i = 0; i < jogadores.size() - 1; i++) {
+                jogadortemp = jogadores.get(i);
+                if (!podeJogar(jogadortemp)) {
+                    empatou++;
+                }
+            }
+            if (empatou == 4) {
+                if (jogadores.get(0).pontos > jogadores.get(2).pontos) {
+                    // A dupla A ganhou!
+                } else if (jogadores.get(0).pontos < jogadores.get(2).pontos) {
+                    // A dupla B ganhou!
+                } else {
+                    // Deu empate!
+                }
+            }
 
             // Proximo jogador!
             jogadorDavez = (jogadorDavez + 1) % maxJogadores;
@@ -234,6 +239,26 @@ public class JogoServidor {
             } else {
                 controlador.servidorTcp.controlaJogadas(jogadorDavez);
             }
+        }
+    }
+
+    public void acabouRodada(Jogador jogador, int pontosA, int pontosB) {
+        // Finalizar jogo e avisar
+        for (int i = 0; i <= maxJogadores - 1; i++) {
+            if (i == 0) {
+                fimdeRodada(pontosA, pontosB);
+
+            } else {
+                jogador = controlador.jogo.jogadores.get(i);
+                controlador.servidorTcp.avisaFimRodada(jogador, pontosA, pontosB);
+            }
+        }
+
+        rodada++;
+        if ((rodada == 14) || (pontosA >= 7) || (pontosB >= 7)) {
+            fimdeJogo(pontosA, pontosB);
+        } else {
+            controlador.comecaRodada(); // Comeca nova rodada            
         }
     }
 
@@ -306,7 +331,7 @@ public class JogoServidor {
         return pecas;
     }
 
-    public boolean jogadaValida(Jogador jogador, Peca peca, String lado) {
+    public boolean jogadaValida(Peca peca, String lado, boolean girar) {
         boolean aceitou = false;
 
         if (lado.equals("Esquerdo")) {
@@ -332,7 +357,9 @@ public class JogoServidor {
             // Tentar encaixar do lado ESQUERDO do jogo atual
             if (peca.ladoE == pEsq.ladoE) {
                 // Pode encaixar, mas tem que inverter a peca!
-                peca.inverter();
+                if (girar) {
+                    peca.inverter();
+                }
 //                avisarOutrosJogadores(jogador, peca, lado);
                 return true;
             } else if (peca.ladoD == pEsq.ladoE) {
@@ -351,7 +378,9 @@ public class JogoServidor {
                 return true;
             } else if (peca.ladoD == pDir.ladoD) {
                 // Pode encaixar, mas tem que inverter a peca!
-                peca.inverter();
+                if (girar) {
+                    peca.inverter();
+                }
 //                avisarOutrosJogadores(jogador, peca, lado);
                 return true;
             }
@@ -394,6 +423,15 @@ public class JogoServidor {
     private void fimdeRodada(int pontosA, int pontosB) {
         controlador.gui.alertaUsuario("Fim de rodada!");
         controlador.gui.atualizaPlacar(pontosA, pontosB);
+        if (pontosA > pontosB) {
+            controlador.gui.alertaUsuario("Dupa A ganhou!!");
+        }
+        else if (pontosA < pontosB) {
+            controlador.gui.alertaUsuario("Dupa B ganhou!!");
+        }
+        else {
+            controlador.gui.alertaUsuario("DEU EMPATE!");
+        }
 
     }
 
@@ -418,5 +456,15 @@ public class JogoServidor {
     public void atualizaPecasJogador(Jogador jogador, Peca peca) {
         controlador.jogo.jogadores.get(jogador.numJogador).removePeca(peca);
         controlador.gui.atualizaTabelaJogadores(controlador.jogo.jogadores);
+    }
+
+    private boolean podeJogar(Jogador jogadortemp) {
+        for (int i = 0; i < jogadortemp.listaDePecas.size(); i++) {
+            if ((jogadaValida(jogadortemp.listaDePecas.get(i), "esq", false))
+                    || (jogadaValida(jogadortemp.listaDePecas.get(i), "dir", false))) {
+                return true;
+            }
+        }
+        return false;
     }
 }
