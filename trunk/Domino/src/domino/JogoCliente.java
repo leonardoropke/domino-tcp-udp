@@ -107,6 +107,9 @@ public class JogoCliente {
         int dir = Integer.parseInt(strjogada.substring(3, 4));
         
         String lado = strjogada.substring(6, 9);
+        
+        int numJogadorAnterior = Integer.parseInt(strjogada.substring(10));
+        
         System.out.println("esq: "+esq);
         System.out.println("dir: "+dir);
         System.out.println("lado: "+lado);
@@ -119,12 +122,12 @@ public class JogoCliente {
         
         
     //public void atualizaTabelaJogadoresCliente(String nomeJogador, int i, int pecas) {
-        int jogadorAnterior = numJogador -1;
+        int jogadorAnterior = numJogadorAnterior;
         int linhaJogador = controlador.gui.pegaJogador(jogadores.get(jogadorAnterior).nome);
         int pecasJogador = controlador.gui.pegaPecasJogador(jogadores.get(jogadorAnterior).nome);
         pecasJogador--;
         
-//        controlador.gui.atualizaTabelaJogadoresCliente (jogadores.get(numJogador-1).nome, linhaJogador, pecasJogador);
+//        controlador.gui.atualizaTabelaJogadoresCliente (jogadores.get(jogadorAnterior).nome, linhaJogador, pecasJogador);
         controlador.gui.mostraJogo(pecasJogo);
 
         
