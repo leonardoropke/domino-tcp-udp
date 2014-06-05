@@ -163,8 +163,12 @@ public class JogoServidor {
         int pontosA = 0, pontosB = 0;
         
         Jogador jogador = controlador.jogo.jogadores.get(jogadorDavez);
+        
+        System.out.println("Jogador: "+jogador.nome+"("+jogador.numJogador+") | npecas: "+jogador.listaDePecas.size());
 
         if (jogador.listaDePecas.size() == 0) { // Acabou a rodada! jogadorDavez ganhou!
+            
+            System.out.println("Jogador "+jogador.nome+" acabou as pecas!");
 
             // 1- Calcular pontuacao!
             // 2- Incrementar pontuacao dele e do outro membro da dupla!
@@ -190,6 +194,8 @@ public class JogoServidor {
                 }
             }
 
+            System.out.println("Calculando pontos...");
+            
             // Incrementando pontos da dupla!
             if (jogadorDavez % 2 == 0) { // Eh par! Dupla A!
                 jogador = controlador.jogo.jogadores.get(0);
@@ -205,6 +211,9 @@ public class JogoServidor {
 
             pontosA = controlador.jogo.jogadores.get(0).pontos + controlador.jogo.jogadores.get(2).pontos;
             pontosB = controlador.jogo.jogadores.get(1).pontos + controlador.jogo.jogadores.get(3).pontos;
+            
+            System.out.println("Pontos A: "+pontosA);
+            System.out.println("Pontos B: "+pontosB);
 
             acabouRodada (pontosA, pontosB);
 
@@ -231,7 +240,20 @@ public class JogoServidor {
                 controlador.alertaUsuario("Sua vez de jogar!");
                 controlador.gui.destravaTela();
             } else {
-                controlador.servidorTcp.controlaJogadas(jogadorDavez);
+                
+                                        new Thread() {
+                            @Override
+                            public void run() {
+                                
+                                try {
+                                    controlador.servidorTcp.controlaJogadas(jogadorDavez);
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                }
+
+                            }
+                        }.start();
+
             }
         }
     }
@@ -239,12 +261,19 @@ public class JogoServidor {
     public void acabouRodada(int pontosA, int pontosB) {
         // Finalizar jogo e avisar
         Jogador jogador;
+        
+        System.out.println("Avisando todos os jogadores do fim da rodada!");
+        
         for (int i = 0; i <= maxJogadores - 1; i++) {
             if (i == 0) {
+                System.out.println("Avisando servidor!");
                 fimdeRodada(pontosA, pontosB);
 
             } else {
                 jogador = controlador.jogo.jogadores.get(i);
+                
+                System.out.println("Avisando jogador '"+jogador.nome+"' ...");
+                
                 controlador.servidorTcp.avisaFimRodada(jogador, pontosA, pontosB);
             }
         }
@@ -342,11 +371,12 @@ public class JogoServidor {
 
         Peca pEsq = controlador.jogo.pecasJogo.get(0);
         Peca pDir = controlador.jogo.pecasJogo.get(controlador.jogo.pecasJogo.size() - 1);
-
+/*
         System.out.println("Peca da esquerda: " + pEsq);
         System.out.println("Peca da direita: " + pDir);
         System.out.println("Peca desejada: " + peca);
         System.out.println("Lado: " + lado);
+*/
         if (lado.equals("esq")) {
             System.out.println("Tentando encaixar do lado esquerdo!");
             // Tentar encaixar do lado ESQUERDO do jogo atual

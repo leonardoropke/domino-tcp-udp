@@ -727,17 +727,9 @@ public class jFrame extends javax.swing.JFrame {
 
                         // Travar a tela e chamar o proximo jogador
                         travaTela();
-                        new Thread() {
-
-                            @Override
-                            public void run() {
-                                try {
-                                    controladorServidor.jogo.proximoJogador(pecaSelecionada);
-                                } catch (Exception e) {
-                                    System.out.println(e);
-                                }
-                            }
-                        }.start();
+                        
+                        controladorServidor.jogo.proximoJogador(pecaSelecionada);
+                        
 
                     } else {
                         JOptionPane.showMessageDialog(null, "Jogada invalida!");
