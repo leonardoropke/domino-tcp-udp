@@ -283,7 +283,7 @@ public class ServidorTCP {
                 try {
                     if (jogador.numJogador != i) {
                         System.out.println("Peca: "+ peca.toString());
-                        String str = "jogada " + peca.toString() + " " + lado;
+                        String str = "jogada " + peca.toString() + " " + lado + " " + jogador.numJogador;
                         System.out.println("str: '"+str+"'");
                         controlador.jogo.jogadores.get(i).output.writeObject(str);
                         controlador.jogo.jogadores.get(i).output.flush();
@@ -294,5 +294,6 @@ public class ServidorTCP {
 
             }
         }
+        controlador.jogo.jogadores.get(jogador.numJogador).removePeca(peca);
     }
 }

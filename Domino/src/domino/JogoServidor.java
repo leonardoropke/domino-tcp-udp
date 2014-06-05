@@ -207,7 +207,6 @@ public class JogoServidor {
             pontosB = controlador.jogo.jogadores.get(1).pontos + controlador.jogo.jogadores.get(3).pontos;
 
             acabouRodada (pontosA, pontosB);
-            
 
         } else {
             conta++;

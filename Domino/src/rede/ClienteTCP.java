@@ -120,7 +120,7 @@ public class ClienteTCP {
                 System.out.println("Comando mensagem!");
                 controlador.gui.adicionaMsg(temp.substring(temp.indexOf(" ") + 1, temp.length()));
                 break;
-            case "jogada": // Recebe uma jogada no formato 'jogada [3:2] esq
+            case "jogada": // Recebe uma jogada no formato 'jogada [3:2] esq 2
                 System.out.println("Comando jogada!");
                 controlador.jogo.recebeJogada(temp.substring(temp.indexOf(" ") + 1, temp.length()));
                 break;
