@@ -127,7 +127,7 @@ public class JogoCliente {
         int pecasJogador = controlador.gui.pegaPecasJogador(jogadores.get(jogadorAnterior).nome);
         pecasJogador--;
         
-//        controlador.gui.atualizaTabelaJogadoresCliente (jogadores.get(jogadorAnterior).nome, linhaJogador, pecasJogador);
+        controlador.gui.atualizaTabelaJogadoresCliente (jogadores.get(jogadorAnterior).nome, linhaJogador, pecasJogador);
         controlador.gui.mostraJogo(pecasJogo);
 
         
