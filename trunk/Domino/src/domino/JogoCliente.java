@@ -193,5 +193,50 @@ public class JogoCliente {
 
     }
 
+    public void fimRodada(String pontostr) {
+        int pontosA, pontosB;
+        // 'X Y'
+        String astr = pontostr.substring(0, 1);
+        String bstr = pontostr.substring(2, 3);
+        
+        pontosA = Integer.parseInt(pontostr.substring(0, 1));
+        pontosB = Integer.parseInt(pontostr.substring(2, 3));
+        
+        if (pontosA > pontosB) {
+            controlador.gui.alertaUsuario("Dupa A ganhou a rodada!!");
+        }
+        else if (pontosA < pontosB) {
+            controlador.gui.alertaUsuario("Dupa B ganhou a rodada!!");
+        }
+        else {
+            controlador.gui.alertaUsuario("DEU EMPATE na rodada!");
+        }
+        
+        controlador.gui.alertaUsuario("Fim da rodada!");
+        
+    }
+
+    public void fimJogo(String pontostr) {
+        int pontosA, pontosB;
+                
+        String astr = pontostr.substring(0, 1);
+        String bstr = pontostr.substring(2, 3);
+        
+        pontosA = Integer.parseInt(pontostr.substring(0, 1));
+        pontosB = Integer.parseInt(pontostr.substring(2, 3));
+        
+        if (pontosA > pontosB) {
+            controlador.gui.alertaUsuario("Dupa A ganhou o jogo!!");
+        }
+        else if (pontosA < pontosB) {
+            controlador.gui.alertaUsuario("Dupa B ganhou o jogo!!");
+        }
+        else {
+            controlador.gui.alertaUsuario("DEU EMPATE no jogo!!");
+        }
+        
+        controlador.gui.alertaUsuario("Fim de jogo!");
+    }
+
     
 }

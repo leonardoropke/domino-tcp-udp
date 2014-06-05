@@ -96,6 +96,7 @@ public class ClienteTCP {
         }
         System.out.println("Comando: '" + comando + "'");
         // 1o comando recebido: 'receber peca1 peca2 peca3...'
+        
         switch (comando) {
             case "jogadores": // OK
                 System.out.println("Comando jogadores!!");
@@ -127,15 +128,14 @@ public class ClienteTCP {
                 System.out.println("Comando jogar!");
                 controlador.alertaUsuario("Sua vez de jogar!");
                 controlador.gui.destravaTela();
-
                 break;
-            case "fimdrodada":
+            case "fimrodada": // fimrodada 3 5
                 System.out.println("Comando fimdejogo!");
-                controlador.gui.alertaUsuario("Fim da rodada!");
+                controlador.jogo.fimRodada(temp.substring(temp.indexOf(" ") + 1));
                 break;
             case "fimjogo": // fimdejogo
                 System.out.println("Comando fimdejogo!");
-                controlador.gui.alertaUsuario("Fim de jogo!");
+                controlador.jogo.fimJogo(temp.substring(temp.indexOf(" ") + 1));
                 break;
 
         }
