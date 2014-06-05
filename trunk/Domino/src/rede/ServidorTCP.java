@@ -102,9 +102,9 @@ public class ServidorTCP {
     }
 
     // Envia uma peca comprada para um jogador
-    public void enviaPecaComprada (Jogador jogador, Peca peca) {
+    public void enviaPecaComprada(Jogador jogador, Peca peca) {
         try {
-            System.out.println("Mandando peca "+peca.toString()+" para o jogador "+jogador.nome+" !");
+            System.out.println("Mandando peca " + peca.toString() + " para o jogador " + jogador.nome + " !");
             jogador.output.writeObject("pega " + peca.toString());
             jogador.output.flush();
 
@@ -135,7 +135,9 @@ public class ServidorTCP {
         Jogador jogador;
         for (int i = 0; i < controlador.jogo.jogadores.size(); i++) {
             jogador = controlador.jogo.jogadores.get(i);
-            if (i != 0) jogador.enviaPecaCliente();
+            if (i != 0) {
+                jogador.enviaPecaCliente();
+            }
         }
     }
 
@@ -200,9 +202,9 @@ public class ServidorTCP {
             } else if (recebido.contains("comprar")) { // Tratar opcao de compra de pecas
                 System.out.println("Jogador '" + jogador.nome + "' quer comprar pecas!");
                 //System.out.println("recebido: '"+recebido+"'");
-                
-                String indexPecaString = recebido.substring(recebido.indexOf(" ")+1);
-                
+
+                String indexPecaString = recebido.substring(recebido.indexOf(" ") + 1);
+
                 int indexPecaDisponivel = Integer.parseInt(indexPecaString);
                 controlador.jogo.compraPeca(jogador, indexPecaDisponivel);
 
@@ -228,7 +230,7 @@ public class ServidorTCP {
                 if (controlador.jogo.jogadaValida(peca, lado, true)) {
 
                     System.out.println("Jogada valida!");
-                    
+
                     // AQUI TEM QUE ATUALIZAR OS OUTROS JOGADORES DESSA JOGADA!
                     avisaJogada(jogador, peca, lado);
 
@@ -250,13 +252,24 @@ public class ServidorTCP {
         }
     }
 
-    public void avisaFimRodada(Jogador jogador, int pontosA, int pontosB) {
-        try {
-            jogador.output.writeObject("fimrodada " + pontosA + " " + pontosB);
-            jogador.output.flush();
-        } catch (Exception e) {
-            System.out.println("Erro ao mandar fim de rodada o jogador!");
-        }
+    public void avisaFimRodada(final Jogador jogador, final int pontosA, final int pontosB) {
+
+        new Thread() {
+
+            @Override
+            public void run() {
+
+                try {
+                    jogador.output.writeObject("fimrodada " + pontosA + " " + pontosB);
+                    jogador.output.flush();
+
+                } catch (Exception e) {
+                    System.out.println("Erro ao mandar fim de rodada o jogador!");
+                }
+            }
+        }.start();
+
+
     }
 
     public void avisaFimJogo(Jogador jogador, int pontosA, int pontosB) {
@@ -282,9 +295,9 @@ public class ServidorTCP {
             } else {
                 try {
                     if (jogador.numJogador != i) {
-                        System.out.println("Peca: "+ peca.toString());
+                        System.out.println("Peca: " + peca.toString());
                         String str = "jogada " + peca.toString() + " " + lado + " " + jogador.numJogador;
-                        System.out.println("str: '"+str+"'");
+                        System.out.println("str: '" + str + "'");
                         controlador.jogo.jogadores.get(i).output.writeObject(str);
                         controlador.jogo.jogadores.get(i).output.flush();
                     }
