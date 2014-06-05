@@ -160,7 +160,8 @@ public class JogoServidor {
     }
 
     public void proximoJogador(Peca pecaJogada) {
-
+        int pontosA = 0, pontosB = 0;
+        
         Jogador jogador = controlador.jogo.jogadores.get(jogadorDavez);
 
         if (jogador.listaDePecas.size() == 0) { // Acabou a rodada! jogadorDavez ganhou!
@@ -202,10 +203,10 @@ public class JogoServidor {
                 jogador.pontos = jogador.pontos + pontos;
             }
 
-            int pontosA = controlador.jogo.jogadores.get(0).pontos + controlador.jogo.jogadores.get(2).pontos;
-            int pontosB = controlador.jogo.jogadores.get(1).pontos + controlador.jogo.jogadores.get(3).pontos;
+            pontosA = controlador.jogo.jogadores.get(0).pontos + controlador.jogo.jogadores.get(2).pontos;
+            pontosB = controlador.jogo.jogadores.get(1).pontos + controlador.jogo.jogadores.get(3).pontos;
 
-            acabouRodada (jogador, pontosA, pontosB);
+            acabouRodada (pontosA, pontosB);
             
 
         } else {
@@ -221,13 +222,7 @@ public class JogoServidor {
                 }
             }
             if (empatou == 4) {
-                if (jogadores.get(0).pontos > jogadores.get(2).pontos) {
-                    // A dupla A ganhou!
-                } else if (jogadores.get(0).pontos < jogadores.get(2).pontos) {
-                    // A dupla B ganhou!
-                } else {
-                    // Deu empate!
-                }
+                acabouRodada (pontosA, pontosB);
             }
 
             // Proximo jogador!
@@ -242,8 +237,9 @@ public class JogoServidor {
         }
     }
 
-    public void acabouRodada(Jogador jogador, int pontosA, int pontosB) {
+    public void acabouRodada(int pontosA, int pontosB) {
         // Finalizar jogo e avisar
+        Jogador jogador;
         for (int i = 0; i <= maxJogadores - 1; i++) {
             if (i == 0) {
                 fimdeRodada(pontosA, pontosB);
