@@ -129,9 +129,13 @@ public class ClienteTCP {
                 controlador.gui.destravaTela();
 
                 break;
-            case "fimdejogo":
+            case "fimdrodada":
                 System.out.println("Comando fimdejogo!");
-                fim = true;
+                controlador.gui.alertaUsuario("Fim da rodada!");
+                break;
+            case "fimjogo": // fimdejogo
+                System.out.println("Comando fimdejogo!");
+                controlador.gui.alertaUsuario("Fim de jogo!");
                 break;
 
         }
