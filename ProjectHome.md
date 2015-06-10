@@ -1,0 +1,1 @@
+Jogo de dominó com até 4 jogadores, usando os protocolos da camada de transporte TCP e UDP com transferência confiável de dados.
